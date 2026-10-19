@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSZ — PRO PAKET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050507;
+      --bg-2: #0a0a0f;
+      --card: #0e0e14;
+      --card-2: #12121a;
+      --border: #1e1e2a;
+      --border-2: #2a2a3a;
+      --text: #e8e8f0;
+      --muted: #8b8b9a;
+      --dim: #5a5a6a;
+      --neon: #00ffa3;
+      --neon-2: #7c5cff;
+      --neon-dim: rgba(0, 255, 163, 0.1);
+      --danger: #ff4d6a;
+      --warn: #ffb84d;
+      --ok: #00ffa3;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text); font-family: var(--font);
+      font-size: 15px; line-height: 1.6; min-height: 100vh;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    }
+    ::selection { background: var(--neon); color: #000; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-2); }
+    ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    input, textarea, select { font-family: inherit; font-size: inherit; }
+    ul { list-style: none; }
+
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; width: 100%; }
+    .page { display: none; padding-top: 88px; padding-bottom: 80px; min-height: 100vh; animation: fadeIn 0.35s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    #scrollProgress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--neon), var(--neon-2));
+      z-index: 10000; transition: width 0.1s linear;
+    }
+
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+      background: rgba(5, 5, 7, 0.85); backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px; max-width: 1180px; margin: 0 auto; padding: 0 24px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; }
+    .nav-brand .logo-mark {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--neon), var(--neon-2));
+      display: grid; place-items: center; font-family: var(--mono);
+      font-weight: 800; font-size: 0.75rem; color: #000;
+    }
+    .nav-brand span { color: var(--neon); }
+
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.87rem;
+      font-weight: 500; color: var(--muted); transition: var(--transition); position: relative;
+    }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+    .nav-links a.active { color: var(--neon); }
+    .nav-links a.active::after {
+      content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+      width: 16px; height: 2px; background: var(--neon); border-radius: 2px;
+    }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .theme-toggle {
+      width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border);
+      display: grid; place-items: center; color: var(--muted); transition: var(--transition); font-size: 1rem;
+    }
+    .theme-toggle:hover { border-color: var(--neon); color: var(--neon); }
+    .hamburger {
+      display: none; width: 38px; height: 38px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); place-items: center; color: var(--text); font-size: 1.1rem;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 22px; border-radius: var(--radius-sm); font-weight: 600;
+      font-size: 0.88rem; transition: var(--transition); white-space: nowrap; border: 1px solid transparent;
+    }
+    .btn-primary { background: var(--neon); color: #000; }
+    .btn-primary:hover { box-shadow: 0 0 24px rgba(0, 255, 163, 0.4); transform: translateY(-1px); }
+    .btn-outline { border-color: var(--border-2); color: var(--text); }
+    .btn-outline:hover { border-color: var(--neon); color: var(--neon); }
+    .btn-sm { padding: 7px 14px; font-size: 0.8rem; }
+
+    .hero { padding: 80px 0 100px; position: relative; overflow: hidden; }
+    .hero::before {
+      content: ''; position: absolute; top: -200px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124, 92, 255, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -200px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0, 255, 163, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+      border-radius: 100px; border: 1px solid var(--border-2);
+      background: rgba(0, 255, 163, 0.05); font-family: var(--mono);
+      font-size: 0.75rem; color: var(--neon); margin-bottom: 24px;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--neon); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; max-width: 800px; }
+    .hero h1 .gradient { background: linear-gradient(135deg, var(--neon), var(--neon-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero h1 .cursor { display: inline-block; width: 3px; height: 1em; background: var(--neon); margin-left: 4px; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .hero p.lead { font-size: 1.05rem; color: var(--muted); max-width: 640px; margin-bottom: 32px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; transition: var(--transition); position: relative; overflow: hidden; }
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--neon), var(--neon-2)); opacity: 0; transition: var(--transition); }
+    .stat-card:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .stat-card:hover::before { opacity: 1; }
+    .stat-card .stat-value { font-size: 2.2rem; font-weight: 800; font-family: var(--mono); color: var(--neon); line-height: 1; margin-bottom: 6px; }
+    .stat-card .stat-label { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
+
+    .live-clock { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 100px; border: 1px solid var(--border); background: var(--card); font-family: var(--mono); font-size: 0.82rem; color: var(--muted); margin-top: 24px; }
+    .live-clock .clock-time { color: var(--neon); font-weight: 600; }
+    .live-clock .clock-date { color: var(--dim); }
+
+    .section { padding: 60px 0; }
+    .section-head { margin-bottom: 40px; }
+    .section-head .eyebrow { font-family: var(--mono); font-size: 0.75rem; color: var(--neon); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .section-head .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--neon); }
+    .section-head h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; }
+    .section-head p { color: var(--muted); margin-top: 10px; max-width: 600px; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; transition: var(--transition); }
+    .card:hover { border-color: var(--border-2); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    .about-text p { color: var(--muted); margin-bottom: 16px; line-height: 1.8; }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--text); font-weight: 600; }
+
+    .skill-bars { display: flex; flex-direction: column; gap: 20px; }
+    .skill-bar .skill-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; font-weight: 500; }
+    .skill-bar .skill-label span:last-child { font-family: var(--mono); color: var(--neon); font-size: 0.78rem; }
+    .skill-track { height: 6px; background: var(--bg-2); border-radius: 3px; overflow: hidden; }
+    .skill-fill { height: 100%; background: linear-gradient(90deg, var(--neon), var(--neon-2)); border-radius: 3px; width: 0; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; align-items: center; }
+    .filter-chip { padding: 7px 16px; border-radius: 100px; border: 1px solid var(--border); font-size: 0.82rem; font-weight: 500; color: var(--muted); transition: var(--transition); background: var(--card); }
+    .filter-chip:hover { border-color: var(--border-2); color: var(--text); }
+    .filter-chip.active { background: var(--neon); color: #000; border-color: var(--neon); }
+
+    .search-box { position: relative; margin-bottom: 24px; }
+    .search-box input { width: 100%; padding: 13px 44px 13px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); outline: none; transition: var(--transition); }
+    .search-box input:focus { border-color: var(--neon); box-shadow: 0 0 0 3px var(--neon-dim); }
+    .search-box input::placeholder { color: var(--dim); }
+    .search-box .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--dim); font-size: 1rem; pointer-events: none; }
+    .search-box .search-shortcut { position: absolute; right: 42px; top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 0.7rem; color: var(--dim); padding: 2px 6px; border: 1px solid var(--border); border-radius: 4px; pointer-events: none; }
+
+    .project-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: var(--transition); }
+    .project-card:hover { border-color: var(--neon); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0, 255, 163, 0.08); }
+    .project-thumb { aspect-ratio: 16/10; background: var(--card-2); display: grid; place-items: center; font-family: var(--mono); font-size: 2rem; color: var(--border-2); position: relative; overflow: hidden; }
+    .project-thumb .thumb-tag { position: absolute; top: 12px; left: 12px; padding: 3px 10px; border-radius: 100px; background: rgba(0,0,0,0.6); border: 1px solid var(--border-2); font-size: 0.68rem; color: var(--neon); font-weight: 500; }
+    .project-body { padding: 18px; }
+    .project-body h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .project-body p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+    .pricing-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .pricing-table th, .pricing-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .pricing-table th { background: var(--card-2); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .pricing-table td:first-child { font-weight: 500; }
+    .pricing-table .check { color: var(--neon); }
+    .pricing-table .cross { color: var(--dim); }
+    .pricing-table .highlight { color: var(--neon); font-weight: 700; }
+
+    .calc-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-top: 32px; }
+    .calc-box h3 { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .calc-box h3 .mono { font-family: var(--mono); color: var(--neon); font-size: 0.85rem; }
+    .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .calc-field label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+    .calc-field input, .calc-field select { width: 100%; padding: 11px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); outline: none; transition: var(--transition); }
+    .calc-field input:focus, .calc-field select:focus { border-color: var(--neon); }
+    .calc-result { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: var(--radius-sm); margin-top: 8px; }
+    .calc-result .calc-label { font-size: 0.85rem; color: var(--muted); }
+    .calc-result .calc-value { font-family: var(--mono); font-size: 1.4rem; font-weight: 700; color: var(--neon); }
+
+    .blog-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: var(--transition); }
+    .blog-card:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .blog-thumb { aspect-ratio: 16/9; background: var(--card-2); display: grid; place-items: center; font-size: 1.6rem; color: var(--border-2); }
+    .blog-body { padding: 18px; }
+    .blog-meta { display: flex; gap: 12px; font-size: 0.72rem; color: var(--dim); margin-bottom: 8px; font-family: var(--mono); }
+    .blog-meta .cat { color: var(--neon); }
+    .blog-body h3 { font-size: 0.98rem; font-weight: 600; margin-bottom: 6px; }
+    .blog-body p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+    .accordion-item { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 10px; background: var(--card); overflow: hidden; transition: var(--transition); }
+    .accordion-item.open { border-color: var(--neon); }
+    .accordion-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; text-align: left; font-weight: 500; font-size: 0.92rem; transition: var(--transition); gap: 12px; }
+    .accordion-header:hover { color: var(--neon); }
+    .accordion-header .acc-icon { font-family: var(--mono); font-size: 1.1rem; color: var(--neon); transition: transform 0.25s ease; flex-shrink: 0; }
+    .accordion-item.open .acc-icon { transform: rotate(45deg); }
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .accordion-body-inner { padding: 0 20px 18px; font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+    .contact-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: start; }
+    .form-field { margin-bottom: 18px; }
+    .form-field label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 8px; color: var(--muted); }
+    .form-field label .req { color: var(--danger); margin-left: 2px; }
+    .form-field input, .form-field textarea { width: 100%; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); outline: none; transition: var(--transition); resize: vertical; }
+    .form-field input:focus, .form-field textarea:focus { border-color: var(--neon); box-shadow: 0 0 0 3px var(--neon-dim); }
+    .form-field.error input, .form-field.error textarea { border-color: var(--danger); }
+    .form-field .field-error { display: none; font-size: 0.75rem; color: var(--danger); margin-top: 6px; font-family: var(--mono); }
+    .form-field.error .field-error { display: block; }
+    .form-field.valid input, .form-field.valid textarea { border-color: var(--ok); }
+
+    .contact-link-card { display: flex; align-items: center; gap: 14px; padding: 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: var(--transition); margin-bottom: 12px; }
+    .contact-link-card:hover { border-color: var(--border-2); }
+    .contact-link-card .clc-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; background: var(--bg-2); flex-shrink: 0; }
+    .contact-link-card .clc-body { flex: 1; min-width: 0; }
+    .contact-link-card .clc-title { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+    .contact-link-card .clc-value { font-size: 0.88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .contact-link-card .clc-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .icon-btn { width: 34px; height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; place-items: center; color: var(--muted); transition: var(--transition); font-size: 0.9rem; }
+    .icon-btn:hover { border-color: var(--neon); color: var(--neon); }
+
+    .footer { border-top: 1px solid var(--border); padding: 40px 0 32px; margin-top: 60px; }
+    .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: flex-start; }
+    .footer-brand .nav-brand { margin-bottom: 10px; }
+    .footer-brand p { font-size: 0.8rem; color: var(--dim); max-width: 280px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 16px; }
+    .footer-socials a { width: 36px; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--border); display: grid; place-items: center; color: var(--muted); transition: var(--transition); }
+    .footer-socials a:hover { border-color: var(--neon); color: var(--neon); }
+    .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+    .footer-col h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); margin-bottom: 14px; font-family: var(--mono); }
+    .footer-col a { display: block; font-size: 0.85rem; color: var(--muted); padding: 4px 0; transition: var(--transition); }
+    .footer-col a:hover { color: var(--neon); }
+    .footer-bottom { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.78rem; color: var(--dim); font-family: var(--mono); }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9500; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.2s ease; }
+    .modal-overlay.show { display: flex; opacity: 1; }
+    .modal { background: var(--card); border: 1px solid var(--border-2); border-radius: var(--radius); max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow); transform: scale(0.95); transition: transform 0.2s ease; }
+    .modal-overlay.show .modal { transform: scale(1); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--card); z-index: 1; }
+    .modal-header h3 { font-size: 1.1rem; font-weight: 700; }
+    .modal-close { width: 32px; height: 32px; border-radius: var(--radius-sm); display: grid; place-items: center; color: var(--muted); transition: var(--transition); font-size: 1.1rem; }
+    .modal-close:hover { color: var(--danger); background: rgba(255,77,106,0.1); }
+    .modal-body { padding: 24px; }
+    .modal-body .modal-tag { display: inline-block; padding: 3px 10px; border-radius: 100px; background: var(--neon-dim); color: var(--neon); font-size: 0.72rem; font-weight: 600; margin-bottom: 12px; }
+    .modal-body p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 14px; }
+    .modal-body .modal-features { margin-top: 16px; }
+    .modal-body .modal-features li { padding: 6px 0; font-size: 0.85rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+    .modal-body .modal-features li::before { content: '▸'; color: var(--neon); }
+
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { display: flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: var(--radius-sm); background: var(--card); border: 1px solid var(--border-2); box-shadow: var(--shadow); font-size: 0.85rem; font-weight: 500; min-width: 240px; max-width: 360px; pointer-events: auto; animation: toastIn 0.3s ease; }
+    .toast .toast-icon { flex-shrink: 0; font-size: 1.1rem; }
+    .toast.success { border-left: 3px solid var(--ok); }
+    .toast.success .toast-icon { color: var(--ok); }
+    .toast.error { border-left: 3px solid var(--danger); }
+    .toast.error .toast-icon { color: var(--danger); }
+    .toast.warn { border-left: 3px solid var(--warn); }
+    .toast.warn .toast-icon { color: var(--warn); }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(40px); } }
+
+    #backToTop { position: fixed; bottom: 24px; left: 24px; width: 44px; height: 44px; border-radius: 50%; background: var(--card); border: 1px solid var(--border-2); display: grid; place-items: center; color: var(--neon); font-size: 1.1rem; z-index: 8000; opacity: 0; visibility: hidden; transform: translateY(10px); transition: var(--transition); cursor: pointer; }
+    #backToTop.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    #backToTop:hover { background: var(--neon); color: #000; }
+
+    .notfound { text-align: center; padding: 80px 0; }
+    .notfound .nf-code { font-family: var(--mono); font-size: clamp(4rem, 12vw, 8rem); font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--neon), var(--neon-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; }
+    .notfound h2 { font-size: 1.4rem; margin-bottom: 10px; }
+    .notfound p { color: var(--muted); margin-bottom: 28px; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { grid-template-columns: 1fr; }
+      .calc-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hamburger { display: grid; }
+      .nav-links.mobile-open { display: flex; position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 12px; gap: 2px; }
+      .nav-links.mobile-open a { padding: 12px 16px; border-radius: var(--radius-sm); }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 0 16px; }
+      .nav-inner { padding: 0 16px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .hero { padding: 48px 0 60px; }
+      .section { padding: 40px 0; }
+      .pricing-table { font-size: 0.78rem; }
+      .pricing-table th, .pricing-table td { padding: 10px 12px; }
+      .footer-links { gap: 28px; }
+      .toast-container { right: 12px; bottom: 12px; left: 12px; }
+      .toast { min-width: unset; max-width: 100%; }
+      #backToTop { left: 12px; bottom: 12px; }
+    }
+
+    .mono { font-family: var(--mono); }
+    .text-neon { color: var(--neon); }
+    .text-muted { color: var(--muted); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div id="scrollProgress"></div>
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <a href="#dashboard" class="nav-brand" data-nav>
+        <span class="logo-mark">MSZ</span>
+        <span>MSZ</span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#dashboard" data-nav>Dashboard</a>
+        <a href="#hakkimizda" data-nav>Hakkımızda</a>
+        <a href="#hizmetler" data-nav>Hizmetler</a>
+        <a href="#projeler" data-nav>Projeler</a>
+        <a href="#fiyatlar" data-nav>Fiyatlar</a>
+        <a href="#blog" data-nav>Blog</a>
+        <a href="#sss" data-nav>SSS</a>
+        <a href="#iletisim" data-nav>İletişim</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" title="Tema değiştir" aria-label="Tema değiştir">🌙</button>
+        <button class="hamburger" id="hamburger" aria-label="Menü">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app">
+    <section class="page active" id="page-dashboard">
+      <div class="container">
+        <div class="hero">
+          <div class="hero-badge">
+            <span class="dot"></span>
+            PRO PAKET — Gelişmiş Altyapı
+          </div>
+          <h1>
+            Merhaba, ben <span class="gradient">Burak</span>.<br />
+            <span id="typewriterTarget"></span><span class="cursor"></span>
+          </h1>
+          <p class="lead">
+            3 yıldır yazılımla uğraşıyorum. Yapay zeka projelerinden sosyal medya projelerine,
+            web sitelerden oyunlara kadar bir sürü tasarımımız web sitemizde mevcut.
+            Gidip inceleyebilirsiniz.
+          </p>
+          <div class="hero-actions">
+            <a href="#projeler" class="btn btn-primary" data-nav>Projeleri Gör →</a>
+            <a href="#iletisim" class="btn btn-outline" data-nav>İletişime Geç</a>
+          </div>
+          <div class="live-clock" id="liveClock">
+            <span class="mono">⏱</span>
+            <span class="clock-time" id="clockTime">--:--:--</span>
+            <span class="clock-date" id="clockDate">--.--.----</span>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" data-count="3">0</div>
+            <div class="stat-label">Yıl Deneyim</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" data-count="4">0</div>
+            <div class="stat-label">Tamamlanan Proje</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" data-count="2">0</div>
+            <div class="stat-label">Aktif Proje</div>
+          </div>
+        </div>
+
+        <div class="section" style="padding-top: 40px;">
+          <div class="section-head">
+            <div class="eyebrow">Son İşler</div>
+            <h2>Son Projeler</h2>
+          </div>
+          <div class="grid-3" id="recentProjects"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-head">
+            <div class="eyebrow">Hakkımızda</div>
+            <h2>Biz Kimiz</h2>
+          </div>
+          <div class="card about-text" id="aboutHomeText"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-hakkimizda">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Hakkımızda</div>
+          <h2>MSZ</h2>
+          <p>Burak tarafından kurulan, yazılım ve tasarım odaklı bir dijital stüdyo.</p>
+        </div>
+
+        <div class="grid-2" style="align-items: start;">
+          <div class="card about-text" id="aboutFullText"></div>
+          <div>
+            <div class="card" style="margin-bottom: 16px;">
+              <h3 style="font-size: 1.1rem; margin-bottom: 12px;">👤 Burak</h3>
+              <p style="font-size: 0.88rem; color: var(--muted); line-height: 1.7;">
+                Full-stack front-end geliştirici. 3 yıllık deneyim. MSZ'nin kurucusu.
+                Sosyal medya projeleri, web siteleri ve oyunlar üzerine çalışıyor.
+                Kod yazmayı, tasarım yapmayı ve yeni şeyler öğrenmeyi seviyor.
+              </p>
+            </div>
+            <div class="card">
+              <h3 style="font-size: 1.1rem; margin-bottom: 18px;">⚡ Beceriler</h3>
+              <div class="skill-bars" id="skillBars"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-hizmetler">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Hizmetler</div>
+          <h2>Neler Yapıyoruz</h2>
+          <p>Web geliştirmeden sosyal medyaya, oyunlardan yapay zeka projelerine kadar geniş bir yelpazede hizmet veriyoruz.</p>
+        </div>
+        <div class="grid-3" id="servicesGrid"></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-projeler">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Portfolyo</div>
+          <h2>Projeler</h2>
+          <p>Filtreleyin, arayın ve detayları görüntüleyin.</p>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="projectSearch" placeholder="Proje ara..." autocomplete="off" />
+          <span class="search-shortcut">/</span>
+          <span class="search-icon">🔍</span>
+        </div>
+
+        <div class="filter-bar" id="projectFilters">
+          <button class="filter-chip active" data-filter="all">Tümü</button>
+          <button class="filter-chip" data-filter="web">Web</button>
+          <button class="filter-chip" data-filter="sosyal">Sosyal Medya</button>
+          <button class="filter-chip" data-filter="oyun">Oyun</button>
+          <button class="filter-chip" data-filter="ai">Yapay Zeka</button>
+          <button class="filter-chip" data-filter="temizle" style="margin-left: auto; border-color: var(--danger); color: var(--danger);">Temizle</button>
+        </div>
+
+        <div class="grid-3" id="projectsGrid"></div>
+        <p id="noProjects" class="text-muted hidden" style="text-align: center; padding: 40px 0; font-family: var(--mono);">Sonuç bulunamadı.</p>
+      </div>
+    </section>
+
+    <section class="page" id="page-fiyatlar">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Fiyatlandırma</div>
+          <h2>Paketler & Fiyatlar</h2>
+          <p>İhtiyacınıza uygun paketi seçin veya fiyat hesaplayıcı ile tahmini maliyeti görün.</p>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px; border-color: var(--neon); background: linear-gradient(135deg, rgba(0,255,163,0.06), rgba(124,92,255,0.06));">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <span style="font-size: 1.5rem;">🎉</span>
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 2px;">Yılbaşına Kadar %50 İndirim!</h3>
+              <p style="font-size: 0.85rem; color: var(--muted);">2027'ye kadar tüm paketlerde geçerli. Aşağıdaki fiyatlar indirimli fiyatlardır.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th>Özellik</th>
+                <th>Temel</th>
+                <th style="color: var(--neon);">Standart</th>
+                <th>PRO</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Fiyat</strong></td>
+                <td><strong>500₺</strong><br><span style="font-size:0.75rem;color:var(--dim);text-decoration:line-through;">1.000₺</span> <span style="font-size:0.7rem;color:var(--neon);">%50</span></td>
+                <td class="highlight"><strong>1.500₺</strong><br><span style="font-size:0.75rem;color:var(--dim);text-decoration:line-through;">3.000₺</span> <span style="font-size:0.7rem;color:var(--neon);">%50</span></td>
+                <td><strong>2.500₺</strong><br><span style="font-size:0.75rem;color:var(--dim);text-decoration:line-through;">5.000₺</span> <span style="font-size:0.7rem;color:var(--neon);">%50</span></td>
+              </tr>
+              <tr>
+                <td><strong>Teslim Süresi</strong></td>
+                <td><strong>1 gün</strong></td>
+                <td class="highlight"><strong>2 gün</strong></td>
+                <td><strong>4 gün</strong></td>
+              </tr>
+              <tr><td>Sayfa Sayısı</td><td>1-3</td><td class="highlight">3-7</td><td>7+</td></tr>
+              <tr><td>Responsive Tasarım</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Gerçek JS Fonksiyonlar</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Hash Router</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Tema Yönetimi</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Canlı Arama</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Form Doğrulama</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Toast & Modal</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>SSS Accordion</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Scroll Progress</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Canlı Saat</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Ziyaretçi Sayacı</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Fiyat Hesaplayıcı</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Kopyala Butonu</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Typewriter Efekti</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Scroll Reveal</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Lazy Loading</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Lightbox Galeri</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>404 Yönlendirme</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>Klavye Kısayolları</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+              <tr><td>LocalStorage</td><td class="cross">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="calc-box">
+          <h3>💰 Fiyat Hesaplayıcı <span class="mono">[%50 indirimli]</span></h3>
+          <div class="calc-row">
+            <div class="calc-field">
+              <label for="calcPages">Sayfa Sayısı</label>
+              <input type="number" id="calcPages" min="1" max="50" value="5" />
+            </div>
+            <div class="calc-field">
+              <label for="calcPackage">Paket</label>
+              <select id="calcPackage">
+                <option value="temel">Temel — 1.000₺ (1 gün)</option>
+                <option value="standart" selected>Standart — 3.000₺ (2 gün)</option>
+                <option value="pro">PRO — 5.000₺ (4 gün)</option>
+              </select>
+            </div>
+          </div>
+          <div class="calc-result">
+            <span class="calc-label">Tahmini Toplam</span>
+            <span class="calc-value" id="calcResult">3.000₺</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-blog">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Blog</div>
+          <h2>Yazılar</h2>
+          <p>Yazılım, tasarım ve teknoloji üzerine düşünceler.</p>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="blogSearch" placeholder="Blog yazısı ara..." autocomplete="off" />
+          <span class="search-shortcut">/</span>
+          <span class="search-icon">🔍</span>
+        </div>
+
+        <div class="filter-bar" id="blogFilters">
+          <button class="filter-chip active" data-cat="all">Tümü</button>
+          <button class="filter-chip" data-cat="yazilim">Yazılım</button>
+          <button class="filter-chip" data-cat="tasarim">Tasarım</button>
+          <button class="filter-chip" data-cat="teknoloji">Teknoloji</button>
+          <button class="filter-chip" data-cat="temizle" style="margin-left: auto; border-color: var(--danger); color: var(--danger);">Temizle</button>
+        </div>
+
+        <div class="grid-3" id="blogGrid"></div>
+        <p id="noBlog" class="text-muted hidden" style="text-align: center; padding: 40px 0; font-family: var(--mono);">Sonuç bulunamadı.</p>
+      </div>
+    </section>
+
+    <section class="page" id="page-sss">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">SSS</div>
+          <h2>Sıkça Sorulan Sorular</h2>
+          <p>Aklınıza takılan bir şey mi var? Aşağıda arayın veya göz atın.</p>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="faqSearch" placeholder="SSS ara..." autocomplete="off" />
+          <span class="search-shortcut">/</span>
+          <span class="search-icon">🔍</span>
+        </div>
+
+        <div id="faqList"></div>
+        <p id="noFaq" class="text-muted hidden" style="text-align: center; padding: 40px 0; font-family: var(--mono);">Sonuç bulunamadı.</p>
+      </div>
+    </section>
+
+    <section class="page" id="page-iletisim">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">İletişim</div>
+          <h2>Bize Ulaşın</h2>
+          <p>Projeniz hakkında konuşalım. Formu doldurun veya sosyal medyadan ulaşın.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="card">
+            <h3 style="font-size: 1.1rem; margin-bottom: 20px;">📝 Mesaj Gönderin</h3>
+            <form id="contactForm" novalidate>
+              <div class="form-field" id="fieldName">
+                <label for="contactName">Adınız <span class="req">*</span></label>
+                <input type="text" id="contactName" placeholder="Adınız Soyadınız" autocomplete="name" />
+                <div class="field-error" id="errorName">Adınızı girin (en az 2 karakter).</div>
+              </div>
+              <div class="form-field" id="fieldEmail">
+                <label for="contactEmail">E-posta <span class="req">*</span></label>
+                <input type="email" id="contactEmail" placeholder="ornek@email.com" autocomplete="email" />
+                <div class="field-error" id="errorEmail">Geçerli bir e-posta adresi girin.</div>
+              </div>
+              <div class="form-field" id="fieldPhone">
+                <label for="contactPhone">Telefon <span class="req">*</span></label>
+                <input type="tel" id="contactPhone" placeholder="05XX XXX XX XX" autocomplete="tel" />
+                <div class="field-error" id="errorPhone">Geçerli bir telefon numarası girin (en az 10 hane).</div>
+              </div>
+              <div class="form-field" id="fieldMessage">
+                <label for="contactMessage">Mesajınız <span class="req">*</span></label>
+                <textarea id="contactMessage" rows="4" placeholder="Projeniz hakkında kısa bilgi..."></textarea>
+                <div class="field-error" id="errorMessage">Mesajınızı girin (en az 10 karakter).</div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Mesaj Gönder →</button>
+            </form>
+          </div>
+
+          <div>
+            <div class="contact-link-card">
+              <div class="clc-icon" style="color: #E1306C;">📷</div>
+              <div class="clc-body">
+                <div class="clc-title">Instagram</div>
+                <div class="clc-value">@burak_msz</div>
+              </div>
+              <div class="clc-actions">
+                <a href="https://instagram.com/burak_msz" target="_blank" rel="noopener" class="icon-btn" title="Instagram'da aç">↗</a>
+                <button class="icon-btn copy-btn" data-copy="@burak_msz" title="Kopyala">📋</button>
+              </div>
+            </div>
+
+            <div class="contact-link-card">
+              <div class="clc-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M22 6L12 13L2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6Z" stroke="#EA4335" stroke-width="1.8" fill="none"/>
+                  <path d="M2 6L12 13L22 6" stroke="#EA4335" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="clc-body">
+                <div class="clc-title">Gmail</div>
+                <div class="clc-value" style="font-family: var(--mono); font-size: 0.82rem;">burakbilec123@gmail.com</div>
+              </div>
+              <div class="clc-actions">
+                <a href="https://mail.google.com/mail/?view=cm&to=burakbilec123@gmail.com&su=Site%20Hakk%C4%B1nda" target="_blank" rel="noopener" class="icon-btn" title="Gmail'de aç">↗</a>
+                <button class="icon-btn copy-btn" data-copy="burakbilec123@gmail.com" title="Kopyala">📋</button>
+              </div>
+            </div>
+
+            <div class="contact-link-card">
+              <div class="clc-icon" style="font-family: var(--mono); font-weight: 800; color: var(--neon); font-size: 0.85rem;">MSZ</div>
+              <div class="clc-body">
+                <div class="clc-title">Website</div>
+                <div class="clc-value" style="font-size: 0.82rem;">burak-code.github.io/msz</div>
+              </div>
+              <div class="clc-actions">
+                <a href="https://burak-code.github.io/msz/" target="_blank" rel="noopener" class="icon-btn" title="Siteyi aç">↗</a>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 16px;">
+              <h4 style="font-size: 0.85rem; margin-bottom: 10px;">📍 Konum</h4>
+              <p style="font-size: 0.82rem; color: var(--muted);">Türkiye — Uzaktan çalışma</p>
+              <p style="font-size: 0.82rem; color: var(--dim); margin-top: 6px; font-family: var(--mono);">Ortalama yanıt süresi: 2-4 saat</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-gizlilik">
+      <div class="container">
+        <div class="section-head">
+          <div class="eyebrow">Yasal</div>
+          <h2>Gizlilik Politikası</h2>
+          <p>Son güncelleme: Ocak 2025</p>
+        </div>
+        <div class="card about-text" style="max-width: 800px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px;">1. Toplanan Bilgiler</h3>
+          <p>MSZ olarak, yalnızca sizinle iletişime geçmek ve hizmet sunmak amacıyla gerekli olan bilgileri topluyoruz. Bu bilgiler ad, e-posta adresi ve telefon numarası gibi iletişim bilgilerini içerebilir. Form aracılığıyla gönderdiğiniz bilgiler tarayıcınızda yerel olarak saklanır (localStorage).</p>
+
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; margin-top: 24px;">2. Bilgilerin Kullanımı</h3>
+          <p>Toplanan bilgiler yalnızca aşağıdaki amaçlarla kullanılır:</p>
+          <ul style="margin: 8px 0 16px 20px; color: var(--muted); font-size: 0.88rem; line-height: 1.8;">
+            <li>Size daha iyi hizmet sunmak</li>
+            <li>Projeleriniz hakkında sizinle iletişime geçmek</li>
+            <li>Site deneyiminizi iyileştirmek</li>
+            <li>Ziyaretçi sayısını anonim olarak takip etmek</li>
+          </ul>
+
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; margin-top: 24px;">3. Bilgi Paylaşımı</h3>
+          <p>Kişisel bilgileriniz asla üçüncü şahıslarla paylaşılmaz, satılmaz veya kiralanmaz. Yalnızca yasal zorunluluklar çerçevesinde yetkili mercilerle paylaşılabilir.</p>
+
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; margin-top: 24px;">4. Çerezler ve LocalStorage</h3>
+          <p>Bu site, tema tercihinizi, ziyaretçi sayacını ve form geçmişinizi tarayıcınızın localStorage'ında saklar. Bu veriler yalnızca sizin tarayıcınızda bulunur ve sunucuya gönderilmez. Tarayıcı ayarlarınızdan bu verileri temizleyebilirsiniz.</p>
+
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; margin-top: 24px;">5. Güvenlik</h3>
+          <p>Bilgilerinizin güvenliği bizim için önemlidir. Ancak internet üzerinden yapılan hiçbir iletimin %100 güvenli olduğu garanti edilemez.</p>
+
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; margin-top: 24px;">6. İletişim</h3>
+          <p>Gizlilik politikamız hakkında sorularınız için bize <strong style="color: var(--text);">burakbilec123@gmail.com</strong> adresinden ulaşabilirsiniz.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-404">
+      <div class="container">
+        <div class="notfound">
+          <div class="nf-code">404</div>
+          <h2>Sayfa Bulunamadı</h2>
+          <p>Aradığınız sayfa mevcut değil veya taşınmış olabilir. Ana sayfaya dönmek için aşağıdaki butona tıklayın.</p>
+          <a href="#dashboard" class="btn btn-primary" data-nav>← Ana Sayfaya Dön</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="#dashboard" class="nav-brand" data-nav>
+            <span class="logo-mark">MSZ</span>
+            <span>MSZ</span>
+          </a>
+          <p>Yazılım ve tasarım odaklı dijital stüdyo. 3 yıllık deneyim, sınırsız hayal gücü.</p>
+          <div class="footer-socials">
+            <a href="https://instagram.com/burak_msz" target="_blank" rel="noopener" title="Instagram">📷</a>
+            <a href="https://mail.google.com/mail/?view=cm&to=burakbilec123@gmail.com&su=Site%20Hakk%C4%B1nda" target="_blank" rel="noopener" title="Gmail">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M22 6L12 13L2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6Z" stroke="currentColor" stroke-width="1.8" fill="none"/>
+                <path d="M2 6L12 13L22 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="https://burak-code.github.io/msz/" target="_blank" rel="noopener" title="Website" style="font-family: var(--mono); font-weight: 800; font-size: 0.65rem;">MSZ</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Sayfalar</h4>
+            <a href="#dashboard" data-nav>Dashboard</a>
+            <a href="#hakkimizda" data-nav>Hakkımızda</a>
+            <a href="#hizmetler" data-nav>Hizmetler</a>
+            <a href="#projeler" data-nav>Projeler</a>
+          </div>
+          <div class="footer-col">
+            <h4>Diğer</h4>
+            <a href="#fiyatlar" data-nav>Fiyatlar</a>
+            <a href="#blog" data-nav>Blog</a>
+            <a href="#sss" data-nav>SSS</a>
+            <a href="#iletisim" data-nav>İletişim</a>
+          </div>
+          <div class="footer-col">
+            <h4>Yasal</h4>
+            <a href="#gizlilik" data-nav>Gizlilik</a>
+            <a href="https://instagram.com/burak_msz" target="_blank" rel="noopener">Instagram ↗</a>
+            <a href="https://burak-code.github.io/msz/" target="_blank" rel="noopener">Website ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 MSZ — Tüm hakları saklıdır.</span>
+        <span>Ziyaretçi: <span id="visitorCount" class="text-neon">0</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="backToTop" title="Yukarı çık">↑</button>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Proje Detayı</h3>
+        <button class="modal-close" id="modalClose" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+       VERİLER
+    ============================================================ */
+    const PROJECTS = [
+      {
+        id: 1,
+        title: 'MSZ Medya',
+        category: 'sosyal',
+        tags: ['Sosyal Medya', 'Topluluk'],
+        icon: '📱',
+        desc: 'MSZ Medya adlı aktif sosyal medya projesi. İçerik üretimi, topluluk yönetimi ve marka bilinirliği üzerine çalışmalar.',
+        features: ['Sosyal medya stratejisi', 'İçerik üretimi', 'Topluluk yönetimi', 'Marka bilinirliği'],
+        link: 'https://burak-code.github.io/msz-medya/'
+      },
+      {
+        id: 2,
+        title: 'cengO',
+        category: 'sosyal',
+        tags: ['Sosyal Medya', 'Aktif'],
+        icon: '💬',
+        desc: 'Aktif geliştirilmekte olan sosyal medya projesi. Kullanıcı etkileşimi ve topluluk odaklı.',
+        features: ['Sosyal medya özellikleri', 'Kullanıcı etkileşimi', 'Topluluk yönetimi', 'Modern arayüz'],
+        link: 'https://burak-code.github.io/cengo/'
+      },
+      {
+        id: 3,
+        title: 'Kişisel Portfolyo Sitesi',
+        category: 'web',
+        tags: ['Web', 'Frontend'],
+        icon: '💻',
+        desc: 'Modern ve responsive kişisel portfolyo sitesi. Neon temalı tasarım ve gelişmiş JS fonksiyonları.',
+        features: ['Responsive tasarım', 'Hash router', 'Tema yönetimi', 'Animasyonlar'],
+        link: 'https://burak-code.github.io/msz/'
+      },
+      {
+        id: 4,
+        title: 'Yapay Zeka Destekli İçerik Aracı',
+        category: 'ai',
+        tags: ['Yapay Zeka', 'İçerik'],
+        icon: '🤖',
+        desc: 'Yapay zeka kullanarak içerik üretimini hızlandıran deneysel proje. Metin ve görsel üretimi.',
+        features: ['AI metin üretimi', 'Görsel üretimi', 'İçerik planlama', 'API entegrasyonu'],
+        link: '#'
+      }
+    ];
+
+    const BLOG_POSTS = [
+      { id: 1, title: 'Neden Şablonlardan Korkmamalısınız?', cat: 'yazilim', date: '12 Ocak 2025', icon: '📝', desc: 'Kimse sıfırdan bir şey üretmez. İyi yanları alıp birleştirmek asıl beceridir.' },
+      { id: 2, title: 'Neon Tasarımın Psikolojisi', cat: 'tasarim', date: '8 Ocak 2025', icon: '🎨', desc: 'Neden karanlık temalar ve neon renkler bu kadar çekici? İşte bilimsel açıklaması.' },
+      { id: 3, title: 'Yapay Zeka ile Web Geliştirme', cat: 'teknoloji', date: '3 Ocak 2025', icon: '🤖', desc: 'AI araçları web geliştirme sürecini nasıl dönüştürüyor? İşte deneyimlerim.' },
+      { id: 4, title: 'Frontend\'de Performans Optimizasyonu', cat: 'yazilim', date: '28 Aralık 2024', icon: '⚡', desc: 'Sayfa yükleme hızını %50 artırmanın 7 pratik yolu. Gerçek örneklerle.' },
+      { id: 5, title: 'Sosyal Medya Projesi Yönetimi', cat: 'teknoloji', date: '20 Aralık 2024', icon: '📊', desc: 'MSZ Medya projesinde öğrendiğim dersler ve sosyal medya yönetimi ipuçları.' },
+      { id: 6, title: 'Minimalist Tasarım Rehberi', cat: 'tasarim', date: '15 Aralık 2024', icon: '✨', desc: 'Az çok mudur? Minimalist tasarımın temel prensipleri ve web\'de uygulanışı.' }
+    ];
+
+    const FAQS = [
+      { q: 'PRO paket ile ne alıyorum?', a: 'PRO paket, 20+ gerçek çalışan JavaScript fonksiyonu içeren gelişmiş altyapıya sahip bir web sitesi sunar. Hash router, tema yönetimi, canlı arama, form doğrulama, toast/modal sistemleri, SSS accordion, scroll progress, canlı saat, ziyaretçi sayacı, fiyat hesaplayıcı ve daha fazlası dahildir.' },
+      { q: 'Teslimat ne kadar sürer?', a: 'Teslim süresi pakete göre değişir: Temel 1 gün, Standart 2 gün, PRO 4 gün. Projenin karmaşıklığına göre süre değişebilir.' },
+      { q: 'Sitenin tasarımını beğenmezsem?', a: 'Beğenmediyseniz hemen söyleyin, değiştirelim. MSZ olarak müşteri memnuniyetini önemsiyoruz. Revizyon süreci paket kapsamında belirtilmiştir.' },
+      { q: 'Yapay zeka kullanıyor musunuz?', a: 'Evet, projeye göre yapay zeka araçlarından ve şablonlardan faydalanıyoruz. Bütün iyi yanları alıp tek bir güzel site çıkarmayı hedefliyoruz. Zaten şu devirde kimse oturup sıfırdan bir şey üretmez.' },
+      { q: 'Mobil uyumlu mu?', a: 'Kesinlikle. Tüm sitelerimiz responsive tasarıma sahiptir ve mobil, tablet, desktop cihazlarda sorunsuz çalışır.' },
+      { q: 'Kodlar bana teslim ediliyor mu?', a: 'Evet, tüm kaynak kodlar teslim edilir. İstediğiniz gibi düzenleyebilir, geliştirebilirsiniz.' },
+      { q: 'Ödeme nasıl yapılıyor?', a: 'Ödeme detayları proje başlangıcında görüşülür. Genellikle yarısı başlangıçta, yarısı teslimatta olacak şekilde çalışıyoruz.' },
+      { q: 'SEO uyumlu mu?', a: 'Temel SEO uyumluluğu sağlanır: semantic HTML, meta etiketler, hızlı yükleme süreleri. Detaylı SEO çalışması için ek hizmet sunulabilir.' },
+      { q: 'Sonradan değişiklik yapabilir miyim?', a: 'Kodlar size ait olduğu için dilediğiniz zaman değişiklik yapabilirsiniz. Ayrıca teslimat sonrası belirli bir süre ücretsiz destek sunuyoruz.' },
+      { q: 'Hangi teknolojileri kullanıyorsunuz?', a: 'HTML, CSS, JavaScript (vanilla ve modern framework\'ler), responsive tasarım, ve projeye göre çeşitli kütüphaneler. PRO pakette framework bağımlılığı yoktur, saf JavaScript kullanılır.' }
+    ];
+
+    const SERVICES = [
+      { icon: '🌐', title: 'Web Geliştirme', desc: 'Modern, hızlı ve responsive web siteleri. Hash router, tema yönetimi ve gelişmiş JS fonksiyonları.' },
+      { icon: '📱', title: 'Sosyal Medya', desc: 'Sosyal medya stratejisi, içerik üretimi ve topluluk yönetimi. MSZ Medya ve cengO aktif projelerimiz.' },
+      { icon: '🎮', title: 'Oyun Geliştirme', desc: 'Oyun mekaniği, seviye tasarımı ve kullanıcı deneyimi odaklı oyun projeleri.' },
+      { icon: '🤖', title: 'Yapay Zeka', desc: 'Yapay zeka destekli içerik üretimi, otomasyon ve akıllı araçlar. AI destekli projeler.' },
+      { icon: '🎨', title: 'UI/UX Tasarım', desc: 'Kullanıcı odaklı arayüz tasarımı. Neon temalar, glass efektleri ve modern estetik.' },
+      { icon: '⚡', title: 'Performans', desc: 'Hız optimizasyonu, lazy loading ve en iyi kullanıcı deneyimi için performans iyileştirmeleri.' }
+    ];
+
+    const SKILLS = [
+      { name: 'HTML / CSS', level: 95 },
+      { name: 'JavaScript', level: 90 },
+      { name: 'Responsive Tasarım', level: 92 },
+      { name: 'UI/UX Tasarım', level: 85 },
+      { name: 'Yapay Zeka Araçları', level: 80 },
+      { name: 'Sosyal Medya Yönetimi', level: 88 }
+    ];
+
+    const ABOUT_TEXT = [
+      '3 yıldır yazılımla uğraşıyorum. Yapay zeka projelerinden sosyal medya projelerine, web sitelerden oyunlara kadar bir sürü tasarımımız web sitemizde mevcut. Gidip inceleyebilirsiniz.',
+      'Projenize tamamen elle yazılacak diyemem. Yapay zeka ile, bazı şablonlar ile, bütün iyi yanları alıp tek bir güzel site çıkarmayı hedefliyoruz. Zaten şu devirde kimse oturup sıfırdan bir şey üretmez. Emin olun herkesin iyi tarafını alarak muhteşem bir site tasarlıyoruz.',
+      'Beğenmediysen hemen söyle değiştirelim.',
+      'Msz medya adlı aktif kendi yaptığımız sosyal medya projemize göz atın. Web sitemden ulaşabilirsiniz.',
+      'Msz markası her zaman güvenle sunar...'
+    ];
+
+    /* ============================================================
+       1. HASH ROUTER
+    ============================================================ */
+    const routes = ['dashboard', 'hakkimizda', 'hizmetler', 'projeler', 'fiyatlar', 'blog', 'sss', 'iletisim', 'gizlilik'];
+
+    function router() {
+      let hash = location.hash.replace('#', '') || 'dashboard';
+      if (!routes.includes(hash)) hash = '404';
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById('page-' + hash);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav-links a[data-nav]').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + hash);
+      });
+
+      document.getElementById('navLinks').classList.remove('mobile-open');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      if (hash === 'projeler') initProjectsPage();
+      if (hash === 'blog') initBlogPage();
+      if (hash === 'sss') initFaqPage();
+      if (hash === 'hakkimizda') { animateSkills(); }
+      if (hash === 'dashboard') { animateCounters(); animateSkills(); }
+
+      setTimeout(initReveal, 50);
+    }
+
+    window.addEventListener('hashchange', router);
+
+    /* ============================================================
+       2. TEMA YÖNETİMİ
+    ============================================================ */
+    const THEME_KEY = 'msz_theme';
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      if (theme === 'light') {
+        root.style.setProperty('--bg', '#f5f5f7');
+        root.style.setProperty('--bg-2', '#eeeef2');
+        root.style.setProperty('--card', '#ffffff');
+        root.style.setProperty('--card-2', '#f0f0f5');
+        root.style.setProperty('--border', '#e0e0e8');
+        root.style.setProperty('--border-2', '#d0d0d8');
+        root.style.setProperty('--text', '#1a1a2e');
+        root.style.setProperty('--muted', '#6b6b7a');
+        root.style.setProperty('--dim', '#9a9aaa');
+        toggle.textContent = '☀️';
+      } else {
+        root.style.setProperty('--bg', '#050507');
+        root.style.setProperty('--bg-2', '#0a0a0f');
+        root.style.setProperty('--card', '#0e0e14');
+        root.style.setProperty('--card-2', '#12121a');
+        root.style.setProperty('--border', '#1e1e2a');
+        root.style.setProperty('--border-2', '#2a2a3a');
+        root.style.setProperty('--text', '#e8e8f0');
+        root.style.setProperty('--muted', '#8b8b9a');
+        root.style.setProperty('--dim', '#5a5a6a');
+        toggle.textContent = '🌙';
+      }
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY) || 'dark';
+      applyTheme(saved);
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const current = localStorage.getItem(THEME_KEY) || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+        showToast(next === 'dark' ? 'Karanlık tema aktif' : 'Aydınlık tema aktif', 'success');
+      });
+    }
+
+    /* ============================================================
+       3. DEBOUNCE
+    ============================================================ */
+    function debounce(fn, delay) {
+      let timer;
+      return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    /* ============================================================
+       4. TOAST SİSTEMİ
+    ============================================================ */
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const icons = { success: '✓', error: '✕', warn: '⚠' };
+      const toast = document.createElement('div');
+      toast.className = 'toast ' + type;
+      toast.innerHTML = `<span class="toast-icon">${icons[type] || 'ℹ'}</span><span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    /* ============================================================
+       5. MODAL SİSTEMİ
+    ============================================================ */
+    let modalOpen = false;
+
+    function openModal(title, bodyHTML) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = bodyHTML;
+      document.getElementById('modalOverlay').classList.add('show');
+      modalOpen = true;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      modalOpen = false;
+      document.body.style.overflow = '';
+    }
+
+    function initModal() {
+      document.getElementById('modalClose').addEventListener('click', closeModal);
+      document.getElementById('modalOverlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+    }
+
+    /* ============================================================
+       6. TYPEWRITER EFEKTİ
+    ============================================================ */
+    function initTypewriter() {
+      const target = document.getElementById('typewriterTarget');
+      if (!target) return;
+      const words = ['Web Geliştirici', 'Tasarımcı', 'Sosyal Medya Yöneticisi', 'Yapay Zeka Meraklısı'];
+      let wordIndex = 0, charIndex = 0, isDeleting = false;
+
+      function type() {
+        const current = words[wordIndex];
+        if (isDeleting) {
+          target.textContent = current.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          target.textContent = current.substring(0, charIndex + 1);
+          charIndex++;
+        }
+        let speed = isDeleting ? 50 : 100;
+        if (!isDeleting && charIndex === current.length) { speed = 1800; isDeleting = true; }
+        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; speed = 400; }
+        setTimeout(type, speed);
+      }
+      type();
+    }
+
+    /* ============================================================
+       7. CANLI SAAT
+    ============================================================ */
+    function initClock() {
+      const timeEl = document.getElementById('clockTime');
+      const dateEl = document.getElementById('clockDate');
+      if (!timeEl || !dateEl) return;
+      function update() {
+        const now = new Date();
+        timeEl.textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+        dateEl.textContent = `${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${now.getFullYear()}`;
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    /* ============================================================
+       8. ZİYARETÇİ SAYACI
+    ============================================================ */
+    function initVisitorCounter() {
+      const KEY = 'msz_visitor_count';
+      let count = parseInt(localStorage.getItem(KEY) || '0', 10);
+      count++;
+      localStorage.setItem(KEY, count);
+      const el = document.getElementById('visitorCount');
+      if (el) el.textContent = count;
+    }
+
+    /* ============================================================
+       9. SCROLL PROGRESS
+    ============================================================ */
+    function initScrollProgress() {
+      const bar = document.getElementById('scrollProgress');
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = progress + '%';
+      }, { passive: true });
+    }
+
+    /* ============================================================
+       10. YUKARI ÇIK
+    ============================================================ */
+    function initBackToTop() {
+      const btn = document.getElementById('backToTop');
+      window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    /* ============================================================
+       11. SCROLL REVEAL
+    ============================================================ */
+    let revealObserver = null;
+    function initReveal() {
+      if (revealObserver) revealObserver.disconnect();
+      revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObserver.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+    }
+
+    /* ============================================================
+       12. PROJELER SAYFASI
+    ============================================================ */
+    let activeFilters = new Set();
+    let projectQuery = '';
+
+    function renderProjects() {
+      const grid = document.getElementById('projectsGrid');
+      const noEl = document.getElementById('noProjects');
+      if (!grid) return;
+
+      const filtered = PROJECTS.filter(p => {
+        const matchesFilter = activeFilters.size === 0 || activeFilters.has(p.category);
+        const matchesQuery = !projectQuery ||
+          p.title.toLowerCase().includes(projectQuery.toLowerCase()) ||
+          p.desc.toLowerCase().includes(projectQuery.toLowerCase()) ||
+          p.tags.some(t => t.toLowerCase().includes(projectQuery.toLowerCase()));
+        return matchesFilter && matchesQuery;
+      });
+
+      if (filtered.length === 0) { grid.innerHTML = ''; noEl.classList.remove('hidden'); return; }
+      noEl.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="project-card reveal" data-project-id="${p.id}">
+          <div class="project-thumb">
+            <span class="thumb-tag">${p.category.toUpperCase()}</span>
+            <span>${p.icon}</span>
+          </div>
+          <div class="project-body">
+            <h3>${p.title}</h3>
+            <p>${p.desc.substring(0, 80)}...</p>
+          </div>
+        </div>
+      `).join('');
+
+      grid.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', () => openProjectModal(parseInt(card.dataset.projectId)));
+      });
+      setTimeout(initReveal, 30);
+    }
+
+    function openProjectModal(id) {
+      const p = PROJECTS.find(x => x.id === id);
+      if (!p) return;
+      const body = `
+        <span class="modal-tag">${p.category.toUpperCase()}</span>
+        <p>${p.desc}</p>
+        <ul class="modal-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
+        ${p.link && p.link !== '#' ? `<a href="${p.link}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="margin-top:16px;">Projeyi İncele ↗</a>` : ''}
+      `;
+      openModal(p.title, body);
+    }
+
+    function initProjectsPage() {
+      renderProjects();
+      const searchInput = document.getElementById('projectSearch');
+      if (searchInput && !searchInput.dataset.init) {
+        searchInput.dataset.init = 'true';
+        searchInput.addEventListener('input', debounce((e) => {
+          projectQuery = e.target.value.trim();
+          renderProjects();
+        }, 300));
+      }
+      const filters = document.getElementById('projectFilters');
+      if (filters && !filters.dataset.init) {
+        filters.dataset.init = 'true';
+        filters.addEventListener('click', (e) => {
+          const chip = e.target.closest('.filter-chip');
+          if (!chip) return;
+          const val = chip.dataset.filter;
+          if (val === 'temizle') {
+            activeFilters.clear(); projectQuery = '';
+            if (searchInput) searchInput.value = '';
+            filters.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            filters.querySelector('[data-filter="all"]').classList.add('active');
+            renderProjects();
+            showToast('Filtreler temizlendi', 'success');
+            return;
+          }
+          if (val === 'all') {
+            activeFilters.clear();
+            filters.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+          } else {
+            filters.querySelector('[data-filter="all"]').classList.remove('active');
+            chip.classList.toggle('active');
+            if (activeFilters.has(val)) activeFilters.delete(val);
+            else activeFilters.add(val);
+            if (activeFilters.size === 0) filters.querySelector('[data-filter="all"]').classList.add('active');
+          }
+          renderProjects();
+        });
+      }
+    }
+
+    /* ============================================================
+       13. BLOG SAYFASI
+    ============================================================ */
+    let blogCat = 'all';
+    let blogQuery = '';
+
+    function renderBlog() {
+      const grid = document.getElementById('blogGrid');
+      const noEl = document.getElementById('noBlog');
+      if (!grid) return;
+      const filtered = BLOG_POSTS.filter(p => {
+        const matchesCat = blogCat === 'all' || p.cat === blogCat;
+        const matchesQuery = !blogQuery || p.title.toLowerCase().includes(blogQuery.toLowerCase()) || p.desc.toLowerCase().includes(blogQuery.toLowerCase());
+        return matchesCat && matchesQuery;
+      });
+      if (filtered.length === 0) { grid.innerHTML = ''; noEl.classList.remove('hidden'); return; }
+      noEl.classList.add('hidden');
+      grid.innerHTML = filtered.map(p => `
+        <div class="blog-card reveal">
+          <div class="blog-thumb">${p.icon}</div>
+          <div class="blog-body">
+            <div class="blog-meta"><span class="cat">${p.cat}</span><span>${p.date}</span></div>
+            <h3>${p.title}</h3>
+            <p>${p.desc}</p>
+          </div>
+        </div>
+      `).join('');
+      setTimeout(initReveal, 30);
+    }
+
+    function initBlogPage() {
+      renderBlog();
+      const searchInput = document.getElementById('blogSearch');
+      if (searchInput && !searchInput.dataset.init) {
+        searchInput.dataset.init = 'true';
+        searchInput.addEventListener('input', debounce((e) => {
+          blogQuery = e.target.value.trim();
+          renderBlog();
+        }, 300));
+      }
+      const filters = document.getElementById('blogFilters');
+      if (filters && !filters.dataset.init) {
+        filters.dataset.init = 'true';
+        filters.addEventListener('click', (e) => {
+          const chip = e.target.closest('.filter-chip');
+          if (!chip) return;
+          const val = chip.dataset.cat;
+          if (val === 'temizle') {
+            blogCat = 'all'; blogQuery = '';
+            if (searchInput) searchInput.value = '';
+            filters.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            filters.querySelector('[data-cat="all"]').classList.add('active');
+            renderBlog();
+            showToast('Filtreler temizlendi', 'success');
+            return;
+          }
+          blogCat = val;
+          filters.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          renderBlog();
+        });
+      }
+    }
+
+    /* ============================================================
+       14. SSS ACCORDION + ARAMA
+    ============================================================ */
+    let faqQuery = '';
+
+    function renderFaq() {
+      const list = document.getElementById('faqList');
+      const noEl = document.getElementById('noFaq');
+      if (!list) return;
+      const filtered = FAQS.filter(f => !faqQuery || f.q.toLowerCase().includes(faqQuery.toLowerCase()) || f.a.toLowerCase().includes(faqQuery.toLowerCase()));
+      if (filtered.length === 0) { list.innerHTML = ''; noEl.classList.remove('hidden'); return; }
+      noEl.classList.add('hidden');
+      list.innerHTML = filtered.map((f, i) => `
+        <div class="accordion-item" data-faq-idx="${i}">
+          <button class="accordion-header">
+            <span>${f.q}</span>
+            <span class="acc-icon">+</span>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">${f.a}</div></div>
+        </div>
+      `).join('');
+      list.querySelectorAll('.accordion-item').forEach(item => {
+        const header = item.querySelector('.accordion-header');
+        const body = item.querySelector('.accordion-body');
+        header.addEventListener('click', () => {
+          const isOpen = item.classList.contains('open');
+          list.querySelectorAll('.accordion-item.open').forEach(o => {
+            o.classList.remove('open');
+            o.querySelector('.accordion-body').style.maxHeight = '0';
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            body.style.maxHeight = body.scrollHeight + 'px';
+          }
+        });
+      });
+    }
+
+    function initFaqPage() {
+      renderFaq();
+      const searchInput = document.getElementById('faqSearch');
+      if (searchInput && !searchInput.dataset.init) {
+        searchInput.dataset.init = 'true';
+        searchInput.addEventListener('input', debounce((e) => {
+          faqQuery = e.target.value.trim();
+          renderFaq();
+        }, 300));
+      }
+    }
+
+    /* ============================================================
+       15. FİYAT HESAPLAYICI
+    ============================================================ */
+    function initCalculator() {
+      const pagesInput = document.getElementById('calcPages');
+      const pkgSelect = document.getElementById('calcPackage');
+      const resultEl = document.getElementById('calcResult');
+      if (!pagesInput || !pkgSelect || !resultEl) return;
+      function calc() {
+        const pages = Math.max(1, parseInt(pagesInput.value) || 1);
+        const pkg = pkgSelect.value;
+        let base = 1000;                 // Temel
+        if (pkg === 'standart') base = 3000;
+        if (pkg === 'pro') base = 5000;
+        const extraPages = Math.max(0, pages - 3);
+        const total = base + extraPages * 300;
+        resultEl.textContent = total.toLocaleString('tr-TR') + '₺';
+      }
+      pagesInput.addEventListener('input', calc);
+      pkgSelect.addEventListener('change', calc);
+      calc();
+    }
+
+    /* ============================================================
+       16. KOPYALA BUTONU
+    ============================================================ */
+    function initCopyButtons() {
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const text = btn.dataset.copy;
+          if (!text) return;
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('Kopyalandı: ' + text, 'success');
+          }).catch(() => showToast('Kopyalanamadı', 'error'));
+        });
+      });
+    }
+
+    /* ============================================================
+       17. FORM DOĞRULAMA
+    ============================================================ */
+    function initForm() {
+      const form = document.getElementById('contactForm');
+      if (!form || form.dataset.init) return;
+      form.dataset.init = 'true';
+
+      const fields = {
+        name: { el: document.getElementById('contactName'), wrap: document.getElementById('fieldName') },
+        email: { el: document.getElementById('contactEmail'), wrap: document.getElementById('fieldEmail') },
+        phone: { el: document.getElementById('contactPhone'), wrap: document.getElementById('fieldPhone') },
+        message: { el: document.getElementById('contactMessage'), wrap: document.getElementById('fieldMessage') }
+      };
+
+      function validateField(name) {
+        const f = fields[name];
+        const val = f.el.value.trim();
+        let valid = true;
+        if (name === 'name') valid = val.length >= 2;
+        if (name === 'email') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        if (name === 'phone') valid = val.replace(/\D/g, '').length >= 10;
+        if (name === 'message') valid = val.length >= 10;
+        f.wrap.classList.toggle('error', !valid);
+        f.wrap.classList.toggle('valid', valid && val.length > 0);
+        return valid;
+      }
+
+      Object.keys(fields).forEach(name => {
+        fields[name].el.addEventListener('input', () => validateField(name));
+        fields[name].el.addEventListener('blur', () => validateField(name));
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let allValid = true;
+        Object.keys(fields).forEach(name => { if (!validateField(name)) allValid = false; });
+        if (!allValid) { showToast('Lütfen tüm alanları doğru doldurun.', 'error'); return; }
+
+        const history = JSON.parse(localStorage.getItem('msz_form_history') || '[]');
+        history.unshift({
+          name: fields.name.el.value.trim(),
+          email: fields.email.el.value.trim(),
+          phone: fields.phone.el.value.trim(),
+          message: fields.message.el.value.trim(),
+          date: new Date().toISOString()
+        });
+        localStorage.setItem('msz_form_history', JSON.stringify(history.slice(0, 5)));
+
+        showToast('Mesajınız gönderildi! En kısa sürede dönüş yapacağız.', 'success');
+        form.reset();
+        Object.values(fields).forEach(f => f.wrap.classList.remove('valid', 'error'));
+      });
+    }
+
+    /* ============================================================
+       18. KLAVYE KISAYOLLARI
+    ============================================================ */
+    function initKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+          e.preventDefault();
+          const activePage = document.querySelector('.page.active');
+          if (!activePage) return;
+          const search = activePage.querySelector('.search-box input');
+          if (search) search.focus();
+        }
+        if (e.key === 'Escape' && modalOpen) closeModal();
+      });
+    }
+
+    /* ============================================================
+       19. SAYI SAYACI ANİMASYONU
+    ============================================================ */
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const target = parseInt(el.dataset.count, 10);
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 40));
+        const interval = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(interval); }
+          el.textContent = current;
+        }, 30);
+      });
+    }
+
+    /* ============================================================
+       20. BECERİ ÇUBUKLARI
+    ============================================================ */
+    let skillsAnimated = false;
+    function animateSkills() {
+      if (skillsAnimated) return;
+      const container = document.getElementById('skillBars');
+      if (!container || container.children.length === 0) return;
+      skillsAnimated = true;
+      container.querySelectorAll('.skill-fill').forEach((bar, i) => {
+        const width = bar.dataset.width;
+        setTimeout(() => { bar.style.width = width + '%'; }, i * 120);
+      });
+    }
+
+    /* ============================================================
+       SAYFA İÇERİK OLUŞTURMA
+    ============================================================ */
+    function renderAboutTexts() {
+      const homeEl = document.getElementById('aboutHomeText');
+      if (homeEl) homeEl.innerHTML = ABOUT_TEXT.map(p => `<p>${p}</p>`).join('');
+      const fullEl = document.getElementById('aboutFullText');
+      if (fullEl) fullEl.innerHTML = ABOUT_TEXT.map(p => `<p>${p}</p>`).join('');
+    }
+
+    function renderSkills() {
+      const container = document.getElementById('skillBars');
+      if (!container) return;
+      container.innerHTML = SKILLS.map(s => `
+        <div class="skill-bar">
+          <div class="skill-label"><span>${s.name}</span><span>${s.level}%</span></div>
+          <div class="skill-track"><div class="skill-fill" data-width="${s.level}" style="width:0%;"></div></div>
+        </div>
+      `).join('');
+    }
+
+    function renderServices() {
+      const container = document.getElementById('servicesGrid');
+      if (!container) return;
+      container.innerHTML = SERVICES.map(s => `
+        <div class="card reveal">
+          <div style="font-size: 1.8rem; margin-bottom: 12px;">${s.icon}</div>
+          <h3 style="font-size: 1rem; margin-bottom: 8px;">${s.title}</h3>
+          <p style="font-size: 0.85rem; color: var(--muted); line-height: 1.6;">${s.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderRecentProjects() {
+      const container = document.getElementById('recentProjects');
+      if (!container) return;
+      container.innerHTML = PROJECTS.slice(0, 3).map(p => `
+        <div class="project-card reveal" data-project-id="${p.id}">
+          <div class="project-thumb">
+            <span class="thumb-tag">${p.category.toUpperCase()}</span>
+            <span>${p.icon}</span>
+          </div>
+          <div class="project-body">
+            <h3>${p.title}</h3>
+            <p>${p.desc.substring(0, 70)}...</p>
+          </div>
+        </div>
+      `).join('');
+      container.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', () => openProjectModal(parseInt(card.dataset.projectId)));
+      });
+      setTimeout(initReveal, 50);
+    }
+
+    /* ============================================================
+       MOBİL MENÜ
+    ============================================================ */
+    function initMobileMenu() {
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+      if (hamburger) hamburger.addEventListener('click', () => navLinks.classList.toggle('mobile-open'));
+    }
+
+    /* ============================================================
+       BAŞLAT
+    ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      renderAboutTexts();
+      renderSkills();
+      renderServices();
+      renderRecentProjects();
+      router();
+      initClock();
+      initVisitorCounter();
+      initScrollProgress();
+      initBackToTop();
+      initModal();
+      initTypewriter();
+      initCopyButtons();
+      initKeyboardShortcuts();
+      initMobileMenu();
+      initCalculator();
+      initForm();
+      setTimeout(initReveal, 100);
+      if (document.getElementById('page-dashboard').classList.contains('active')) animateCounters();
+    });
+  </script>
+</body>
+</html>

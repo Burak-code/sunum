@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>MSZ  — Görünüm Paketi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* === RESET & DEĞİŞKENLER === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #08080c;
+            --bg-elevated: #0e0e16;
+            --card: #12121a;
+            --card-hover: #181824;
+            --text: #f0f0f5;
+            --text-muted: #9a9ab0;
+            --accent: #6c63ff;
+            --accent2: #00e0b8;
+            --gradient: linear-gradient(135deg, #6c63ff, #00e0b8);
+            --gradient-soft: linear-gradient(135deg, rgba(108, 99, 255, 0.15), rgba(0, 224, 184, 0.08));
+            --border: rgba(255, 255, 255, 0.07);
+            --shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+            --radius: 12px;
+            --transition: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            --navbar-bg: rgba(8, 8, 12, 0.75);
+            --font-main: 'Inter', -apple-system, sans-serif;
+            --font-display: 'Space Grotesk', 'Inter', sans-serif;
+        }
+
+        [data-theme="light"] {
+            --bg: #f4f4fa;
+            --bg-elevated: #ffffff;
+            --card: #ffffff;
+            --card-hover: #f0f0f8;
+            --text: #0a0a12;
+            --text-muted: #5a5a70;
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.12);
+            --navbar-bg: rgba(244, 244, 250, 0.8);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        img, svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: inherit;
+        }
+
+        /* === SCROLL PROGRESS === */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: var(--gradient);
+            z-index: 1001;
+            transition: width 0.1s linear;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* === NAVBAR === */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(18px) saturate(1.6);
+            -webkit-backdrop-filter: blur(18px) saturate(1.6);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s;
+        }
+
+        .navbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: opacity var(--transition);
+        }
+        .logo:hover { opacity: 0.8; }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        [data-theme="light"] .nav-links a:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .nav-links a.active {
+            color: var(--text);
+            background: var(--gradient-soft);
+            font-weight: 600;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+            font-size: 1.1rem;
+        }
+        .theme-toggle:hover {
+            background: var(--card-hover);
+            transform: scale(1.05);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            place-items: center;
+            font-size: 1.2rem;
+        }
+
+        /* === MOBİL MENÜ === */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 68px;
+            left: 0;
+            right: 0;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 999;
+            flex-direction: column;
+            gap: 4px;
+            backdrop-filter: blur(18px);
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all var(--transition);
+        }
+        .mobile-menu a:hover,
+        .mobile-menu a.active {
+            background: var(--gradient-soft);
+            color: var(--text);
+        }
+
+        /* === ANA İÇERİK === */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 100px 24px 80px;
+            min-height: 100vh;
+        }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeUp 0.45s ease both; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === HERO === */
+        .hero {
+            text-align: center;
+            padding: 60px 0 80px;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 100px;
+            background: var(--gradient-soft);
+            border: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--accent2);
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.6rem, 8vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: var(--text-muted);
+            max-width: 640px;
+            margin: 0 auto 36px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: #fff;
+            box-shadow: 0 8px 28px -8px rgba(108, 99, 255, 0.5);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 36px -8px rgba(108, 99, 255, 0.65);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            background: var(--card);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* === BÖLÜM BAŞLIKLARI === */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 560px;
+            margin: 0 auto;
+            font-size: 1rem;
+        }
+
+        /* === KARTLAR === */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            transition: all var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            background: var(--card-hover);
+            border-color: rgba(108, 99, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: var(--gradient-soft);
+            display: grid;
+            place-items: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .card h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.925rem;
+            line-height: 1.65;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+
+        /* === HİZMET ÖZETİ (ANA SAYFA) === */
+        .service-mini {
+            text-align: center;
+            padding: 28px 20px;
+        }
+        .service-mini .card-icon { margin: 0 auto 16px; }
+
+        /* === PROJELER === */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            padding: 9px 22px;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            transition: all var(--transition);
+        }
+        .filter-btn:hover {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+        .filter-btn.active {
+            background: var(--gradient);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px -4px rgba(108, 99, 255, 0.5);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all var(--transition);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+        .project-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: rgba(108, 99, 255, 0.4);
+            box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+        }
+
+        .project-thumb {
+            height: 160px;
+            display: grid;
+            place-items: center;
+            font-size: 2.4rem;
+            font-weight: 700;
+            font-family: var(--font-display);
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+        .project-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.15), transparent);
+        }
+
+        .project-info {
+            padding: 20px 22px;
+        }
+        .project-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .project-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .project-tag {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 3px 12px;
+            border-radius: 100px;
+            background: var(--gradient-soft);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--accent2);
+        }
+
+        /* === FİYATLAR === */
+        .pricing-card {
+            text-align: center;
+            padding: 40px 28px;
+        }
+        .pricing-card:hover {
+            transform: translateY(-8px);
+        }
+        .pricing-card.featured {
+            border-color: rgba(108, 99, 255, 0.5);
+            background: linear-gradient(180deg, rgba(108, 99, 255, 0.08), var(--card));
+        }
+        .pricing-card .price {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin: 16px 0 4px;
+            letter-spacing: -1px;
+        }
+        .pricing-card .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        .pricing-card ul {
+            list-style: none;
+            margin: 24px 0;
+            text-align: left;
+        }
+        .pricing-card ul li {
+            padding: 8px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pricing-card ul li::before {
+            content: '✓';
+            color: var(--accent2);
+            font-weight: 700;
+        }
+
+        /* === BLOG === */
+        .blog-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .blog-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* === SSS === */
+        .faq-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all var(--transition);
+        }
+        .faq-item:hover {
+            border-color: rgba(108, 99, 255, 0.3);
+        }
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 20px 24px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: color var(--transition);
+        }
+        .faq-question:hover { color: var(--accent2); }
+        .faq-question .chevron {
+            transition: transform var(--transition);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .faq-item.open .faq-question .chevron {
+            transform: rotate(180deg);
+            color: var(--accent2);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 24px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding: 0 24px 20px;
+        }
+
+        /* === İLETİŞİM === */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 10px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.925rem;
+            transition: all var(--transition);
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12);
+        }
+        .form-group input.error,
+        .form-group textarea.error {
+            border-color: #ff5c7a;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .error-msg {
+            color: #ff5c7a;
+            font-size: 0.78rem;
+            margin-top: 4px;
+            min-height: 1em;
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all var(--transition);
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        .contact-card:hover {
+            background: var(--card-hover);
+            border-color: rgba(108, 99, 255, 0.35);
+            transform: translateX(4px);
+        }
+        .contact-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--gradient-soft);
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            font-size: 1.3rem;
+        }
+        .contact-card .info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .contact-card .info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .map-placeholder {
+            margin-top: 24px;
+            height: 180px;
+            border-radius: var(--radius);
+            background: var(--card);
+            border: 1px dashed var(--border);
+            display: grid;
+            place-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            border-top: 1px solid var(--border);
+            background: var(--bg-elevated);
+            padding: 48px 24px 32px;
+            margin-top: 60px;
+        }
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 40px;
+        }
+        .footer h5 {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+        }
+        .footer p, .footer a {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+        .footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color var(--transition);
+        }
+        .footer a:hover { color: var(--accent2); }
+        .footer .social-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .footer .social-row a {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            display: grid;
+            place-items: center;
+            transition: all var(--transition);
+        }
+        .footer .social-row a:hover {
+            background: var(--gradient-soft);
+            transform: translateY(-2px);
+        }
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 32px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* === TOAST === */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card);
+            border: 1px solid var(--accent2);
+            color: var(--text);
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* === YUKARI ÇIK === */
+        .scroll-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--gradient);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            box-shadow: 0 8px 28px -6px rgba(108, 99, 255, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(16px);
+            transition: all var(--transition);
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .scroll-top:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* === LIGHTBOX === */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
+            display: none;
+            place-items: center;
+            padding: 24px;
+            animation: fadeIn 0.25s ease;
+        }
+        .lightbox.open { display: grid; }
+        .lightbox-content {
+            max-width: 720px;
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+            animation: zoomIn 0.3s ease;
+        }
+        .lightbox-thumb {
+            height: 280px;
+            display: grid;
+            place-items: center;
+            font-size: 4rem;
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: #fff;
+        }
+        .lightbox-body {
+            padding: 28px 32px;
+        }
+        .lightbox-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+        .lightbox-body p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            transition: all var(--transition);
+        }
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.16);
+            transform: rotate(90deg);
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1.3rem;
+            transition: all var(--transition);
+        }
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+        .lightbox-nav.prev { left: 24px; }
+        .lightbox-nav.next { right: 24px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* === ZAMAN ÇİZELGESİ === */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent), var(--accent2));
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+            padding: 20px 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all var(--transition);
+        }
+        .timeline-item:hover {
+            border-color: rgba(108, 99, 255, 0.35);
+            transform: translateX(4px);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 24px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+        }
+        .timeline-item h4 {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .timeline-item .year {
+            font-size: 0.75rem;
+            color: var(--accent2);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .timeline-item p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* === REVEAL === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === 404 === */
+        .error-page {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .error-page h1 {
+            font-family: var(--font-display);
+            font-size: clamp(5rem, 18vw, 10rem);
+            font-weight: 700;
+            line-height: 1;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -4px;
+        }
+        .error-page p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 16px 0 32px;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: grid; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+        }
+
+        @media (max-width: 640px) {
+            .main-content { padding: 92px 16px 60px; }
+            .hero { padding: 40px 0 56px; }
+            .navbar-inner { padding: 0 16px; height: 62px; }
+            .hero-cta .btn { width: 100%; justify-content: center; }
+            .lightbox-nav { width: 40px; height: 40px; }
+            .lightbox-nav.prev { left: 8px; }
+            .lightbox-nav.next { right: 8px; }
+            .lightbox-close { top: 12px; right: 12px; width: 38px; height: 38px; }
+            .scroll-top { bottom: 20px; right: 20px; width: 42px; height: 42px; }
+        }
+
+        /* === UTIL === */
+        .text-center { text-align: center; }
+        .mt-24 { margin-top: 24px; }
+        .mt-16 { margin-top: 16px; }
+        .mb-0 { margin-bottom: 0; }
+        .flex-center { display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        /* Gmail logo SVG özel */
+        .gmail-icon {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+        .website-icon {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="#/" class="logo" data-link>MSZ</a>
+        <ul class="nav-links">
+            <li><a href="#/" data-link>Ana Sayfa</a></li>
+            <li><a href="#hakkimizda" data-link>Hakkımızda</a></li>
+            <li><a href="#hizmetler" data-link>Hizmetler</a></li>
+            <li><a href="#projeler" data-link>Projeler</a></li>
+            <li><a href="#fiyatlar" data-link>Fiyatlar</a></li>
+            <li><a href="#blog" data-link>Blog</a></li>
+            <li><a href="#sss" data-link>SSS</a></li>
+            <li><a href="#iletisim" data-link>İletişim</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="Tema değiştir">🌙</button>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menü">☰</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MOBİL MENÜ -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#/" data-link>Ana Sayfa</a>
+    <a href="#hakkimizda" data-link>Hakkımızda</a>
+    <a href="#hizmetler" data-link>Hizmetler</a>
+    <a href="#projeler" data-link>Projeler</a>
+    <a href="#fiyatlar" data-link>Fiyatlar</a>
+    <a href="#blog" data-link>Blog</a>
+    <a href="#sss" data-link>SSS</a>
+    <a href="#iletisim" data-link>İletişim</a>
+</div>
+
+<!-- ANA İÇERİK -->
+<main class="main-content" id="mainContent">
+
+    <!-- ANA SAYFA -->
+    <div class="page" id="page-home">
+        <section class="hero">
+            <div class="hero-badge">✦ MSZ  — Standart Paket</div>
+            <h1><span class="gradient-text">MSZ </span></h1>
+            <p>
+                3 yıldır yazılımla uğraşıyorum. Yapay zeka projelerinden sosyal medya projelerine, web sitelerden oyunlara kadar bir sürü tasarımımız web sitemizde mevcut.
+            </p>
+            <div class="hero-cta">
+                <a href="#projeler" class="btn btn-primary" data-link>Projeleri Gör →</a>
+                <a href="#iletisim" class="btn btn-outline" data-link>İletişime Geç</a>
+            </div>
+        </section>
+
+        <section class="section reveal">
+            <div class="section-header">
+                <h2>Biz Kimiz?</h2>
+                <p>MSZ olarak neler yapıyoruz?</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;">
+                        Projenize tamamen elle yazılacak diyemem. Yapay zeka ile, bazı şablonlar ile, bütün iyi yanları alıp tek bir güzel site çıkarmayı hedefliyoruz. Zaten şu devirde kimse oturup sıfırdan bir şey üretmez.
+                    </p>
+                </div>
+                <div class="card">
+                    <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;">
+                        Emin olun herkesin iyi tarafını alarak muhteşem bir site tasarlıyoruz. Beğenmediysen hemen söyle değiştirelim. Msz medya adlı aktif kendi yaptığımız sosyal medya projemize göz atın.
+                    </p>
+                </div>
+            </div>
+            <div class="card" style="margin-top:24px;">
+                <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.8;text-align:center;">
+                    Web sitemden ulaşabilirsiniz. MSZ markası her zaman güvenle sunar...
+                </p>
+            </div>
+        </section>
+
+        <section class="section reveal">
+            <div class="section-header">
+                <h2>Hizmet Özeti</h2>
+                <p>Görünüm ağırlıklı, animasyonlu ve şık çözümler</p>
+            </div>
+            <div class="grid-4">
+                <div class="card service-mini">
+                    <div class="card-icon">🌐</div>
+                    <h3>Web Tasarım</h3>
+                    <p>Modern, responsive ve gradient ağırlıklı siteler.</p>
+                </div>
+                <div class="card service-mini">
+                    <div class="card-icon">🎨</div>
+                    <h3>UI/UX</h3>
+                    <p>Kullanıcı dostu, göz yormayan arayüzler.</p>
+                </div>
+                <div class="card service-mini">
+                    <div class="card-icon">⚡</div>
+                    <h3>Animasyon</h3>
+                    <p>Scroll reveal, hover efektleri ve geçişler.</p>
+                </div>
+                <div class="card service-mini">
+                    <div class="card-icon">📱</div>
+                    <h3>Responsive</h3>
+                    <p>Mobil, tablet ve masaüstü uyumlu.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section reveal">
+            <div class="section-header">
+                <h2>Son Projeler</h2>
+                <p>Son çalışmalarımızdan bazıları</p>
+            </div>
+            <div class="project-grid" id="homeProjects"></div>
+        </section>
+    </div>
+
+    <!-- HAKKIMIZDA -->
+    <div class="page" id="page-hakkimizda">
+        <section class="section">
+            <div class="section-header">
+                <h2>Hakkımızda</h2>
+                <p>MSZ'nin hikayesi</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.85;margin-bottom:16px;">
+                        3 yıldır yazılımla uğraşıyorum. Yapay zeka projelerinden sosyal medya projelerine, web sitelerden oyunlara kadar bir sürü tasarımımız web sitemizde mevcut. Gidip inceleyebilirsiniz.
+                    </p>
+                    <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.85;">
+                        Projenize tamamen elle yazılacak diyemem. Yapay zeka ile, bazı şablonlar ile, bütün iyi yanları alıp tek bir güzel site çıkarmayı hedefliyoruz. Zaten şu devirde kimse oturup sıfırdan bir şey üretmez. Emin olun herkesin iyi tarafını alarak muhteşem bir site tasarlıyoruz.
+                    </p>
+                </div>
+                <div class="card">
+                    <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.85;margin-bottom:16px;">
+                        Beğenmediysen hemen söyle değiştirelim. Msz medya adlı aktif kendi yaptığımız sosyal medya projemize göz atın. Web sitemden ulaşabilirsiniz.
+                    </p>
+                    <p style="color:var(--text-muted);font-size:0.95rem;line-height:1.85;">
+                        MSZ markası her zaman güvenle sunar. Kaliteyi ve şıklığı bir arada buluşturuyoruz.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:24px;text-align:center;">
+                <div class="card-icon" style="margin:0 auto 16px;">👨‍💻</div>
+                <h3>Burak — Kurucu</h3>
+                <p style="color:var(--text-muted);max-width:560px;margin:0 auto;">
+                    MSZ'nin kurucusu. 3 yıllık yazılım deneyimiyle projelerini hayata geçiriyor. Aktif projeler: MSZ Media ve cengO.
+                </p>
+                <div style="margin-top:20px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+                    <a href="https://instagram.com/burak_msz" target="_blank" rel="noopener" class="btn btn-outline" style="font-size:0.85rem;padding:10px 20px;">Instagram</a>
+                    <a href="https://burak-code.github.io/msz/" target="_blank" rel="noopener" class="btn btn-outline" style="font-size:0.85rem;padding:10px 20px;">Website</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>3 Yıllık Yolculuk</h2>
+                <p>Zaman çizelgemiz</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="year">2022</div>
+                    <h4>Başlangıç</h4>
+                    <p>İlk yazılım adımları, temel web geliştirme ve tasarım öğrenimi.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2023</div>
+                    <h4>Proje Geliştirme</h4>
+                    <p>MSZ Media fikri doğdu, ilk sosyal medya projeleri hayata geçirildi.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2024</div>
+                    <h4>Büyüme</h4>
+                    <p>cengO ve MSZ Tournament projeleri, yapay zeka entegrasyonu.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="year">2025</div>
+                    <h4>MSZ </h4>
+                    <p>Profesyonel hizmet sunumu, görünüm odaklı projeler ve büyüyen portföy.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- HİZMETLER -->
+    <div class="page" id="page-hizmetler">
+        <section class="section">
+            <div class="section-header">
+                <h2>Hizmetlerimiz</h2>
+                <p>Görünüm ağırlıklı, animasyonlu ve şık çözümler</p>
+            </div>
+            <div class="grid-2">
+                <div class="card reveal">
+                    <div class="card-icon">🌐</div>
+                    <h3>Web Tasarım</h3>
+                    <p>Gradientler, animasyonlar ve modern kart tasarımlarıyla göz alıcı web siteleri. Responsive ve hızlı.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="card-icon">🎨</div>
+                    <h3>UI/UX Tasarım</h3>
+                    <p>Kullanıcı dostu arayüzler, göz yormayan renk paletleri ve akıcı geçişler. Siyah tema önceliğimiz.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="card-icon">⚡</div>
+                    <h3>Animasyon & Etkileşim</h3>
+                    <p>Scroll reveal, hover efektleri, sayfa geçişleri. Siteyi canlı hissettiren dokunuşlar.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="card-icon">📱</div>
+                    <h3>Responsive Tasarım</h3>
+                    <p>Mobil, tablet ve masaüstünde kusursuz görünüm. Her ekran boyutuna uyum.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PROJELER -->
+    <div class="page" id="page-projeler">
+        <section class="section">
+            <div class="section-header">
+                <h2>Projelerimiz</h2>
+                <p>Filtreleyerek inceleyin</p>
+            </div>
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-filter="all">Tümü</button>
+                <button class="filter-btn" data-filter="web">Web</button>
+                <button class="filter-btn" data-filter="oyun">Oyun</button>
+                <button class="filter-btn" data-filter="sosyal">Sosyal</button>
+            </div>
+            <div class="project-grid" id="projectGrid"></div>
+        </section>
+    </div>
+
+    <!-- FİYATLAR -->
+    <div class="page" id="page-fiyatlar">
+        <section class="section">
+            <div class="section-header">
+                <h2>Fiyatlandırma</h2>
+                <p>İhtiyacınıza uygun paket seçin</p>
+            </div>
+            <div class="grid-3">
+                <div class="card pricing-card reveal">
+                    <div class="card-icon" style="margin:0 auto 16px;">🌱</div>
+                    <h3>Başlangıç</h3>
+                    <div class="price">500<span> / proje</span></div>
+                    <p style="color:var(--text-muted);font-size:0.85rem;">Temel görünüm paketi</p>
+                    <ul>
+                        <li>Tek sayfa tasarım</li>
+                        <li>Responsive</li>
+                        <li>Temel animasyonlar</li>
+                        <li>1 revizyon</li>
+                    </ul>
+                    <a href="#iletisim" class="btn btn-outline" data-link style="width:100%;justify-content:center;">Seç</a>
+                </div>
+                <div class="card pricing-card featured reveal">
+                    <div class="card-icon" style="margin:0 auto 16px;">🚀</div>
+                    <h3>Standart</h3>
+                    <div class="price">₺1.500<span> / proje</span></div>
+                    <p style="color:var(--text-muted);font-size:0.85rem;">En çok tercih edilen</p>
+                    <ul>
+                        <li>Çok sayfa</li>
+                        <li>Gelişmiş animasyonlar</li>
+                        <li>Lightbox galeri</li>
+                        <li>Dark/light tema</li>
+                        <li>2 revizyon</li>
+                    </ul>
+                    <a href="#iletisim" class="btn btn-primary" data-link style="width:100%;justify-content:center;">Seç</a>
+                </div>
+                <div class="card pricing-card reveal">
+                    <div class="card-icon" style="margin:0 auto 16px;">💎</div>
+                    <h3>Premium</h3>
+                    <div class="price">₺2.500<span> / proje</span></div>
+                    <p style="color:var(--text-muted);font-size:0.85rem;">Tam kapsamlı çözüm</p>
+                    <ul>
+                        <li>Özel tasarım</li>
+                        <li>Sınırsız animasyon</li>
+                        <li>Gelişmiş özellikler</li>
+                        <li>SEO optimizasyonu</li>
+                        <li>Sınırsız revizyon</li>
+                    </ul>
+                    <a href="#iletisim" class="btn btn-outline" data-link style="width:100%;justify-content:center;">Seç</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- BLOG -->
+    <div class="page" id="page-blog">
+        <section class="section">
+            <div class="section-header">
+                <h2>Blog</h2>
+                <p>Yazılım, tasarım ve projeler hakkında</p>
+            </div>
+            <div class="grid-2" id="blogGrid"></div>
+        </section>
+    </div>
+
+    <!-- SSS -->
+    <div class="page" id="page-sss">
+        <section class="section">
+            <div class="section-header">
+                <h2>Sıkça Sorulan Sorular</h2>
+                <p>Merak ettikleriniz</p>
+            </div>
+            <div id="faqContainer"></div>
+        </section>
+    </div>
+
+    <!-- İLETİŞİM -->
+    <div class="page" id="page-iletisim">
+        <section class="section">
+            <div class="section-header">
+                <h2>İletişim</h2>
+                <p>Projenizden bahsedin, size dönelim</p>
+            </div>
+            <div class="contact-grid">
+                <div class="card" style="padding:32px;">
+                    <form id="contactForm" novalidate>
+                        <div class="form-group">
+                            <label for="name">Adınız Soyadınız</label>
+                            <input type="text" id="name" placeholder="Adınız Soyadınız" autocomplete="name">
+                            <div class="error-msg" id="nameError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-posta Adresiniz</label>
+                            <input type="email" id="email" placeholder="ornek@mail.com" autocomplete="email">
+                            <div class="error-msg" id="emailError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mesajınız</label>
+                            <textarea id="message" placeholder="Projeniz hakkında kısaca bahsedin..."></textarea>
+                            <div class="error-msg" id="messageError"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Gönder</button>
+                    </form>
+                </div>
+                <div>
+                    <a href="https://instagram.com/burak_msz" target="_blank" rel="noopener" class="contact-card">
+                        <div class="icon">📷</div>
+                        <div class="info">
+                            <h4>Instagram</h4>
+                            <p>@burak_msz</p>
+                        </div>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&to=burakbilec123@gmail.com&su=Site%20Hakk%C4%B1nda" target="_blank" rel="noopener" class="contact-card">
+                        <div class="icon">
+                            <svg class="gmail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6Z" fill="#EA4335"/>
+                                <path d="M22 6L12 13L2 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="info">
+                            <h4>Gmail</h4>
+                            <p>E-posta gönder</p>
+                        </div>
+                    </a>
+                    <a href="https://burak-code.github.io/msz/" target="_blank" rel="noopener" class="contact-card">
+                        <div class="icon"><span class="website-icon">MSZ</span></div>
+                        <div class="info">
+                            <h4>Website</h4>
+                            <p>burak-code.github.io/msz</p>
+                        </div>
+                    </a>
+                    <div class="map-placeholder">
+                        🗺️ Harita — Gaziantep, Türkiye<br>
+                        <span style="font-size:0.78rem;">(MSZ  merkez)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- GİZLİLİK -->
+    <div class="page" id="page-gizlilik">
+        <section class="section">
+            <div class="section-header">
+                <h2>Gizlilik Politikası</h2>
+                <p>Verileriniz güvende</p>
+            </div>
+            <div class="card" style="padding:36px;">
+                <p style="color:var(--text-muted);line-height:1.85;margin-bottom:16px;">
+                    MSZ  olarak kişisel verilerinizi korumayı taahhüt ediyoruz. Bu gizlilik politikası, sitemizi ziyaret ettiğinizde veya iletişim formunu doldurduğunuzda toplanan bilgilerin nasıl kullanıldığını açıklar.
+                </p>
+                <p style="color:var(--text-muted);line-height:1.85;margin-bottom:16px;">
+                    Topladığımız bilgiler: Adınız, e-posta adresiniz ve mesaj içeriğiniz yalnızca size yanıt vermek amacıyla kullanılır. Üçüncü taraflarla paylaşılmaz.
+                </p>
+                <p style="color:var(--text-muted);line-height:1.85;">
+                    Çerezler: Sitemiz, tema tercihinizi hatırlamak için localStorage kullanır. Bu veriler tarayıcınızdan silinebilir. Daha fazla bilgi için bizimle iletişime geçebilirsiniz.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- 404 -->
+    <div class="page" id="page-404">
+        <div class="error-page">
+            <h1>404</h1>
+            <p>Aradığınız sayfa bulunamadı.</p>
+            <a href="#/" class="btn btn-primary" data-link>Ana Sayfaya Dön</a>
+        </div>
+    </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div>
+            <div class="logo" style="margin-bottom:12px;font-size:1.3rem;" data-link="#/">MSZ </div>
+            <p>3 yıldır yazılımla uğraşıyoruz. Yapay zeka, sosyal medya, web ve oyun projeleri.</p>
+            <p style="margin-top:8px;">MSZ markası her zaman güvenle sunar.</p>
+            <div class="social-row">
+                <a href="https://instagram.com/burak_msz" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+                <a href="https://mail.google.com/mail/?view=cm&to=burakbilec123@gmail.com&su=Site%20Hakk%C4%B1nda" target="_blank" rel="noopener" aria-label="Gmail">
+                    <svg class="gmail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px;">
+                        <path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6Z" fill="#EA4335"/>
+                        <path d="M22 6L12 13L2 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="https://burak-code.github.io/msz/" target="_blank" rel="noopener" aria-label="Website"><span class="website-icon">MSZ</span></a>
+            </div>
+        </div>
+        <div>
+            <h5>Sayfalar</h5>
+            <p><a href="#/" data-link>Ana Sayfa</a></p>
+            <p><a href="#hakkimizda" data-link>Hakkımızda</a></p>
+            <p><a href="#hizmetler" data-link>Hizmetler</a></p>
+            <p><a href="#projeler" data-link>Projeler</a></p>
+        </div>
+        <div>
+            <h5>Diğer</h5>
+            <p><a href="#fiyatlar" data-link>Fiyatlar</a></p>
+            <p><a href="#blog" data-link>Blog</a></p>
+            <p><a href="#sss" data-link>SSS</a></p>
+            <p><a href="#gizlilik" data-link>Gizlilik</a></p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2025 MSZ  — Tüm hakları saklıdır.
+    </div>
+</footer>
+
+<!-- YUKARI ÇIK -->
+<button class="scroll-top" id="scrollTop" aria-label="Yukarı çık">↑</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Mesajınız gönderildi! 🎉</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Kapat">✕</button>
+    <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Önceki">‹</button>
+    <button class="lightbox-nav next" id="lightboxNext" aria-label="Sonraki">›</button>
+    <div class="lightbox-content" id="lightboxContent">
+        <div class="lightbox-thumb" id="lightboxThumb"></div>
+        <div class="lightbox-body">
+            <h3 id="lightboxTitle"></h3>
+            <p id="lightboxDesc"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // === VERİLER ===
+        const projects = [
+            { id: 1, name: 'MSZ Media', category: 'sosyal', desc: 'Aktif sosyal medya projemiz. İçerik üretimi ve yönetimi.', icon: '📱', color: 'linear-gradient(135deg, #6c63ff, #00e0b8)' },
+        ];
+
+        const blogPosts = [
+            { title: 'Yapay Zeka ile Web Tasarımı', excerpt: 'Yapay zeka araçlarını kullanarak nasıl daha hızlı ve şık siteler tasarlıyoruz?', date: '15 Ocak 2025', readTime: '4 dk', icon: '🤖' },
+            { title: 'Gradient Kullanımı Rehberi', excerpt: 'Renk geçişleriyle göz alıcı tasarımlar nasıl yapılır? İpuçları ve örnekler.', date: '8 Ocak 2025', readTime: '3 dk', icon: '🌈' },
+            { title: 'MSZ Media Projesi Nasıl Doğdu?', excerpt: 'Sosyal medya projemizin hikayesi ve büyüme süreci.', date: '1 Ocak 2025', readTime: '5 dk', icon: '📖' },
+            { title: 'Responsive Tasarımın Önemi', excerpt: 'Mobil uyumluluk neden hayati? İstatistikler ve en iyi uygulamalar.', date: '25 Aralık 2024', readTime: '3 dk', icon: '📱' }
+        ];
+
+        const faqs = [
+            { q: 'Teslim süreniz ne kadar?', a: 'Standart paket için teslim süremiz 2 gündür. Projenin karmaşıklığına göre bu süre değişebilir.' },
+            { q: 'Hangi teknolojileri kullanıyorsunuz?', a: 'HTML, CSS, JavaScript ve modern frameworkler. Yapay zeka araçlarından da faydalanıyoruz.' },
+            { q: 'Revizyon hakkım var mı?', a: 'Evet, paketlerimize göre değişen sayıda revizyon hakkınız bulunmaktadır. Standart pakette 2 revizyon hakkı vardır.' },
+            { q: 'Projemi nasıl takip edebilirim?', a: 'Proje süresince size düzenli olarak ilerleme raporları sunuyoruz. Her aşamada onayınızı alıyoruz.' },
+            { q: 'Ödeme nasıl yapılıyor?', a: 'Proje başlangıcında %50, teslimatta %50 olacak şekilde ödeme planı sunuyoruz.' }
+        ];
+
+        // === DEĞİŞKENLER ===
+        let currentPage = 'home';
+        let currentFilter = 'all';
+        let lightboxIndex = 0;
+        let filteredProjects = [...projects];
+
+        // === DOM ===
+        const pages = {
+            home: document.getElementById('page-home'),
+            hakkimizda: document.getElementById('page-hakkimizda'),
+            hizmetler: document.getElementById('page-hizmetler'),
+            projeler: document.getElementById('page-projeler'),
+            fiyatlar: document.getElementById('page-fiyatlar'),
+            blog: document.getElementById('page-blog'),
+            sss: document.getElementById('page-sss'),
+            iletisim: document.getElementById('page-iletisim'),
+            gizlilik: document.getElementById('page-gizlilik'),
+            '404': document.getElementById('page-404')
+        };
+
+        const scrollProgress = document.getElementById('scrollProgress');
+        const navbar = document.querySelector('.navbar');
+        const navLinks = document.querySelectorAll('.nav-links a[data-link]');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const scrollTopBtn = document.getElementById('scrollTop');
+        const toast = document.getElementById('toast');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxContent = document.getElementById('lightboxContent');
+        const lightboxThumb = document.getElementById('lightboxThumb');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+        const lightboxDesc = document.getElementById('lightboxDesc');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        const contactForm = document.getElementById('contactForm');
+        const filterBar = document.getElementById('filterBar');
+        const faqContainer = document.getElementById('faqContainer');
+        const blogGrid = document.getElementById('blogGrid');
+        const projectGrid = document.getElementById('projectGrid');
+        const homeProjects = document.getElementById('homeProjects');
+        const mainContent = document.getElementById('mainContent');
+
+        // === TEMA ===
+        function getTheme() {
+            return localStorage.getItem('msz-theme') || 'dark';
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('msz-theme', theme);
+            themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+
+        setTheme(getTheme());
+
+        themeToggle.addEventListener('click', () => {
+            const next = getTheme() === 'dark' ? 'light' : 'dark';
+            setTheme(next);
+        });
+
+        // === ROUTING ===
+        function getRoute() {
+            const hash = window.location.hash.replace('#', '') || '/';
+            if (hash === '/' || hash === '') return 'home';
+            if (pages[hash]) return hash;
+            return '404';
+        }
+
+        function navigate(route) {
+            if (!pages[route]) route = '404';
+            currentPage = route;
+            Object.keys(pages).forEach(key => {
+                pages[key].classList.remove('active');
+            });
+            pages[route].classList.add('active');
+
+            // Aktif menü vurgusu
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href').replace('#', '');
+                const target = href === '/' ? 'home' : href;
+                link.classList.toggle('active', target === route);
+            });
+
+            // Mobil menü kapat
+            mobileMenu.classList.remove('open');
+
+            // Scroll pozisyonu
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // Sayfaya özel render
+            if (route === 'projeler') renderProjects();
+            if (route === 'blog') renderBlog();
+            if (route === 'sss') renderFaq();
+            if (route === 'home') renderHomeProjects();
+
+            // Reveal animasyonlarını tetikle
+            setTimeout(observeReveals, 100);
+        }
+
+        function handleHashChange() {
+            const route = getRoute();
+            if (route !== currentPage) {
+                navigate(route);
+            }
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+
+        // === LİNKLER ===
+        document.querySelectorAll('[data-link]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    window.location.hash = href;
+                }
+            });
+        });
+
+        // === MOBİL MENÜ ===
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // === SCROLL ===
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            scrollProgress.style.width = progress + '%';
+
+            if (scrollTop > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+
+            if (scrollTop > 20) {
+                navbar.style.background = getTheme() === 'dark'
+                    ? 'rgba(8, 8, 12, 0.92)'
+                    : 'rgba(244, 244, 250, 0.92)';
+            } else {
+                navbar.style.background = getTheme() === 'dark'
+                    ? 'rgba(8, 8, 12, 0.75)'
+                    : 'rgba(244, 244, 250, 0.8)';
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // === PROJELER ===
+        function renderProjects() {
+            filteredProjects = currentFilter === 'all'
+                ? projects
+                : projects.filter(p => p.category === currentFilter);
+
+            projectGrid.innerHTML = filteredProjects.map((p, i) => `
+                <div class="project-card" data-index="${i}">
+                    <div class="project-thumb" style="background:${p.color};">${p.icon}</div>
+                    <div class="project-info">
+                        <h4>${p.name}</h4>
+                        <p>${p.desc}</p>
+                        <span class="project-tag">${p.category === 'web' ? 'Web' : p.category === 'oyun' ? 'Oyun' : 'Sosyal'}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Tıklama
+            projectGrid.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = parseInt(card.dataset.index);
+                    openLightbox(idx, filteredProjects);
+                });
+            });
+        }
+
+        function renderHomeProjects() {
+            homeProjects.innerHTML = projects.slice(0, 4).map((p, i) => `
+                <div class="project-card" data-index="${i}">
+                    <div class="project-thumb" style="background:${p.color};">${p.icon}</div>
+                    <div class="project-info">
+                        <h4>${p.name}</h4>
+                        <p>${p.desc}</p>
+                        <span class="project-tag">${p.category === 'web' ? 'Web' : p.category === 'oyun' ? 'Oyun' : 'Sosyal'}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            homeProjects.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const idx = parseInt(card.dataset.index);
+                    openLightbox(idx, projects.slice(0, 4));
+                });
+            });
+        }
+
+        // === FİLTRE ===
+        filterBar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+            filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderProjects();
+        });
+
+        // === LIGHTBOX ===
+        function openLightbox(index, list) {
+            lightboxIndex = index;
+            const p = list[index];
+            lightboxThumb.style.background = p.color;
+            lightboxThumb.textContent = p.icon;
+            lightboxTitle.textContent = p.name;
+            lightboxDesc.textContent = p.desc;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function lightboxNavigate(dir) {
+            const list = currentFilter === 'all' ? projects : projects.filter(p => p.category === currentFilter);
+            lightboxIndex = (lightboxIndex + dir + list.length) % list.length;
+            const p = list[lightboxIndex];
+            lightboxThumb.style.background = p.color;
+            lightboxThumb.textContent = p.icon;
+            lightboxTitle.textContent = p.name;
+            lightboxDesc.textContent = p.desc;
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', () => lightboxNavigate(-1));
+        lightboxNext.addEventListener('click', () => lightboxNavigate(1));
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('open')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lightboxNavigate(-1);
+            if (e.key === 'ArrowRight') lightboxNavigate(1);
+        });
+
+        // === BLOG ===
+        function renderBlog() {
+            blogGrid.innerHTML = blogPosts.map(post => `
+                <div class="card blog-card">
+                    <div style="font-size:2rem;">${post.icon}</div>
+                    <h3>${post.title}</h3>
+                    <p>${post.excerpt}</p>
+                    <div class="blog-meta">
+                        <span>📅 ${post.date}</span>
+                        <span>⏱️ ${post.readTime} okuma</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // === SSS ===
+        function renderFaq() {
+            faqContainer.innerHTML = faqs.map((f, i) => `
+                <div class="faq-item" data-index="${i}">
+                    <button class="faq-question">
+                        ${f.q}
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="faq-answer">${f.a}</div>
+                </div>
+            `).join('');
+
+            faqContainer.querySelectorAll('.faq-item').forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const isOpen = item.classList.contains('open');
+                    faqContainer.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                    if (!isOpen) item.classList.add('open');
+                });
+            });
+        }
+
+        // === İLETİŞİM FORMU ===
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const messageError = document.getElementById('messageError');
+
+        function validateName() {
+            const val = nameInput.value.trim();
+            if (val.length < 2) {
+                nameError.textContent = 'Adınız en az 2 karakter olmalıdır.';
+                nameInput.classList.add('error');
+                return false;
+            }
+            nameError.textContent = '';
+            nameInput.classList.remove('error');
+            return true;
+        }
+
+        function validateEmail() {
+            const val = emailInput.value.trim();
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(val)) {
+                emailError.textContent = 'Geçerli bir e-posta adresi girin.';
+                emailInput.classList.add('error');
+                return false;
+            }
+            emailError.textContent = '';
+            emailInput.classList.remove('error');
+            return true;
+        }
+
+        function validateMessage() {
+            const val = messageInput.value.trim();
+            if (val.length < 10) {
+                messageError.textContent = 'Mesajınız en az 10 karakter olmalıdır.';
+                messageInput.classList.add('error');
+                return false;
+            }
+            messageError.textContent = '';
+            messageInput.classList.remove('error');
+            return true;
+        }
+
+        nameInput.addEventListener('input', validateName);
+        emailInput.addEventListener('input', validateEmail);
+        messageInput.addEventListener('input', validateMessage);
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const valid = validateName() && validateEmail() && validateMessage();
+            if (valid) {
+                toast.classList.add('show');
+                contactForm.reset();
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+        });
+
+        // === SCROLL REVEAL ===
+        let observer = null;
+
+        function observeReveals() {
+            if (observer) observer.disconnect();
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // === BAŞLANGIÇ ===
+        function init() {
+            const route = getRoute();
+            navigate(route);
+            observeReveals();
+            renderHomeProjects();
+        }
+
+        init();
+
+        // Tema değişince navbar güncelle
+        const originalSetTheme = setTheme;
+        setTheme = function(theme) {
+            originalSetTheme(theme);
+            const scrollTop = window.scrollY;
+            if (scrollTop > 20) {
+                navbar.style.background = theme === 'dark'
+                    ? 'rgba(8, 8, 12, 0.92)'
+                    : 'rgba(244, 244, 250, 0.92)';
+            } else {
+                navbar.style.background = theme === 'dark'
+                    ? 'rgba(8, 8, 12, 0.75)'
+                    : 'rgba(244, 244, 250, 0.8)';
+            }
+        };
+
+        // Yeniden init observer
+        window.addEventListener('hashchange', () => {
+            setTimeout(observeReveals, 200);
+        });
+
+    })();
+</script>
+
+</body>
+</html>
