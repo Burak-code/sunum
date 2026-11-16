@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSZ | Web Paketleri</title>
+    <title>MSZ | ANA SOKET! </title>
     <link rel="icon" href="msz.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -826,9 +826,248 @@
                 font-size: 1.5rem;
             }
         }
+
+        /* MSZ link directory overlay */
+        .directory-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 18px;
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(59,130,246,.16), transparent 42%),
+                radial-gradient(ellipse at 85% 90%, rgba(139,92,246,.13), transparent 42%),
+                rgba(3,3,3,.97);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            opacity: 1;
+            visibility: visible;
+            transition: opacity .28s ease, visibility .28s ease;
+            overflow-y: auto;
+        }
+        .directory-overlay.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .directory-panel {
+            width: min(820px, 100%);
+            position: relative;
+            padding: clamp(25px, 5vw, 48px);
+            border: 1px solid rgba(255,255,255,.11);
+            border-radius: 26px;
+            background: linear-gradient(145deg, rgba(19,19,19,.98), rgba(8,8,8,.98));
+            box-shadow: 0 30px 100px rgba(0,0,0,.62);
+            text-align: center;
+            margin: auto;
+        }
+        .directory-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border: 0;
+            border-radius: 12px;
+            background: #e53935;
+            color: #fff;
+            font-size: 25px;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(229,57,53,.3);
+            transition: transform .2s ease, background .2s ease;
+        }
+        .directory-close:hover {
+            background: #ff4540;
+            transform: scale(1.07);
+        }
+        .directory-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 13px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 999px;
+            color: #c7c7c7;
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+        .directory-kicker::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 12px #22c55e;
+        }
+        .directory-panel h2 {
+            margin: 0 35px 9px;
+            color: #fff;
+            font-size: clamp(1.7rem, 5vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -.045em;
+        }
+        .directory-subtitle {
+            max-width: 480px;
+            margin: 0 auto 28px;
+            color: #999;
+            font-size: .96rem;
+        }
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 13px;
+            text-align: left;
+        }
+        .directory-tile {
+            min-height: 138px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 19px;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 17px;
+            background: rgba(255,255,255,.035);
+            transition: transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease;
+            cursor: pointer;
+        }
+        .directory-tile:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,255,255,.28);
+            background: rgba(255,255,255,.075);
+            box-shadow: 0 14px 30px rgba(0,0,0,.28);
+        }
+        .directory-tile-top {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 13px;
+            background: rgba(255,255,255,.08);
+        }
+        .directory-tile-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+        }
+        .directory-tile-top .gmail-mark {
+            width: 30px;
+            height: 24px;
+        }
+        .directory-tile strong {
+            display: block;
+            font-size: .98rem;
+            font-weight: 700;
+        }
+        .directory-tile small {
+            display: block;
+            margin-top: 3px;
+            color: #929292;
+            font-size: .76rem;
+        }
+        .directory-tile .tile-arrow {
+            float: right;
+            color: #777;
+            font-size: .9rem;
+            transition: transform .2s ease, color .2s ease;
+        }
+        .directory-tile:hover .tile-arrow {
+            color: #fff;
+            transform: translate(3px, -2px);
+        }
+        .directory-tile.current-site {
+            border-color: rgba(59,130,246,.35);
+            background: rgba(59,130,246,.07);
+        }
+        .directory-tile.current-site:hover {
+            border-color: rgba(59,130,246,.7);
+            background: rgba(59,130,246,.13);
+        }
+        .directory-footer {
+            margin-top: 22px;
+            color: #666;
+            font-size: .75rem;
+        }
+        @media (max-width: 620px) {
+            .directory-panel { padding: 54px 17px 22px; border-radius: 20px; }
+            .directory-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+            .directory-tile { min-height: 126px; padding: 14px; }
+            .directory-tile-top { width: 42px; height: 42px; }
+            .directory-panel h2 { margin-left: 0; margin-right: 0; }
+        }
+        @media (max-width: 360px) {
+            .directory-grid { grid-template-columns: 1fr; }
+            .directory-tile { min-height: 95px; flex-direction: row; align-items: center; }
+        }
+
     </style>
 </head>
 <body id="top">
+
+    <!-- MSZ Link Directory: first screen -->
+    <div class="directory-overlay" id="directoryOverlay" role="dialog" aria-modal="true" aria-labelledby="directoryTitle">
+        <div class="directory-panel">
+            <button class="directory-close" id="directoryClose" type="button" aria-label="Ekranı kapat">&times;</button>
+            <div class="directory-kicker">MSZ · Bağlantı Merkezi</div>
+            <h2 id="directoryTitle">Nereye gitmek istersin?</h2>
+            <p class="directory-subtitle">MSZ projelerine ve hizmetlerine tek noktadan ulaş.</p>
+
+            <div class="directory-grid">
+                <a class="directory-tile" href="https://burak-code.github.io/msz-medya/" target="_blank" rel="noopener noreferrer">
+                    <span class="directory-tile-top"><img src="https://raw.githubusercontent.com/Burak-code/msz-medya/main/favicon.png" alt="MSZ Medya logosu"></span>
+                    <span><strong>MSZ Medya <i class="fas fa-arrow-up-right-from-square tile-arrow"></i></strong><small>Medya ve içerik</small></span>
+                </a>
+
+                <a class="directory-tile" href="https://burak-code.github.io/msz_ai/" target="_blank" rel="noopener noreferrer">
+                    <span class="directory-tile-top"><img src="https://raw.githubusercontent.com/Burak-code/msz_ai/main/favicon.png" alt="MSZ AI logosu"></span>
+                    <span><strong>MSZ AI <i class="fas fa-arrow-up-right-from-square tile-arrow"></i></strong><small>Yapay zekâ</small></span>
+                </a>
+
+                <a class="directory-tile" href="https://burak-code.github.io/msz/" target="_blank" rel="noopener noreferrer">
+                    <span class="directory-tile-top"><img src="https://raw.githubusercontent.com/Burak-code/msz/main/favicon.png" alt="MSZ web sitesi logosu"></span>
+                    <span><strong>Web Sitem <i class="fas fa-arrow-up-right-from-square tile-arrow"></i></strong><small>MSZ ana sitesi</small></span>
+                </a>
+
+                <a class="directory-tile current-site" href="#top" id="stayOnSite">
+                    <span class="directory-tile-top"><i class="fas fa-laptop-code" style="font-size:1.45rem;color:#60a5fa;"></i></span>
+                    <span><strong>Site Yaptır / Fiyat <i class="fas fa-arrow-right tile-arrow"></i></strong><small>Paketleri ve fiyatları gör</small></span>
+                </a>
+
+                <a class="directory-tile" href="https://burak-code.github.io/cengo/" target="_blank" rel="noopener noreferrer">
+                    <span class="directory-tile-top"><img src="https://raw.githubusercontent.com/Burak-code/cengo/main/cengo.jpg" alt="Cengo logosu"></span>
+                    <span><strong>Cengo <i class="fas fa-arrow-up-right-from-square tile-arrow"></i></strong><small>Sohbet platformu</small></span>
+                </a>
+
+                <a class="directory-tile" href="https://mail.google.com/mail/u/0/?fs=1&amp;to=burakbilec123@gmail.com&amp;tf=cm" target="_blank" rel="noopener noreferrer">
+                    <span class="directory-tile-top">
+                        <svg class="gmail-mark" viewBox="0 0 48 36" role="img" aria-label="Gmail logosu" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#4285F4" d="M5 35V8.5L12 14v21z"/>
+                            <path fill="#34A853" d="M36 35V14l7-5.5V35z"/>
+                            <path fill="#EA4335" d="M5 8.5 10 4l14 11L38 4l5 4.5L24 23z"/>
+                            <path fill="#C5221F" d="M36 7.5 38 4l5 4.5V14z"/>
+                            <path fill="#FBBC04" d="M5 8.5 10 4l2 3.5V14z"/>
+                        </svg>
+                    </span>
+                    <span><strong>Gmail <i class="fas fa-arrow-up-right-from-square tile-arrow"></i></strong><small>E-posta gönder</small></span>
+                </a>
+            </div>
+            <div class="directory-footer">Bir bağlantı seçerek devam et</div>
+        </div>
+    </div>
+
     <div class="bg-gradient"></div>
     <div class="noise"></div>
 
@@ -1124,6 +1363,33 @@
     </div>
 
     <script>
+
+        // MSZ directory overlay
+        const directoryOverlay = document.getElementById('directoryOverlay');
+        const directoryClose = document.getElementById('directoryClose');
+        const stayOnSite = document.getElementById('stayOnSite');
+
+        function closeDirectory() {
+            directoryOverlay.classList.add('is-hidden');
+            document.body.style.overflow = '';
+        }
+
+        directoryClose.addEventListener('click', closeDirectory);
+        stayOnSite.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeDirectory();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !directoryOverlay.classList.contains('is-hidden')) {
+                closeDirectory();
+            }
+        });
+
+        document.body.style.overflow = 'hidden';
+
+
         // Countdown to 2027-01-01 00:00:00 (local)
         const targetDate = new Date('2027-01-01T00:00:00').getTime();
 
